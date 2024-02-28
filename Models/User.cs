@@ -19,5 +19,9 @@ namespace GroupProject_Ecommerce.Models
         public string LastName { get; set; }
         public string City { get; set; }
         public ICollection<Address> Addresses { get; set; } = new List<Address>();
+        public ICollection<CartItem> CartItems { get; set; }
+        public ICollection<Order> Orders { get; set; }
+
+
     }
 }

@@ -4,6 +4,7 @@ using GroupProject_Ecommerce.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GroupProject_Ecommerce.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    partial class MyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240228065603_product")]
+    partial class product
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -33,7 +36,7 @@ namespace GroupProject_Ecommerce.Migrations
 
                     b.HasKey("UserId");
 
-                    b.ToTable("Addresses", (string)null);
+                    b.ToTable("Addresses");
                 });
 
             modelBuilder.Entity("GroupProject_Ecommerce.Models.Brand", b =>
@@ -54,7 +57,7 @@ namespace GroupProject_Ecommerce.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Brands", (string)null);
+                    b.ToTable("Brands");
                 });
 
             modelBuilder.Entity("GroupProject_Ecommerce.Models.Category", b =>
@@ -77,21 +80,7 @@ namespace GroupProject_Ecommerce.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories", (string)null);
-                });
-
-            modelBuilder.Entity("GroupProject_Ecommerce.Models.Image", b =>
-                {
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Url")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("ProductId");
-
-                    b.ToTable("Images", (string)null);
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("GroupProject_Ecommerce.Models.Material", b =>
@@ -112,7 +101,7 @@ namespace GroupProject_Ecommerce.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Materials", (string)null);
+                    b.ToTable("Materials");
                 });
 
             modelBuilder.Entity("GroupProject_Ecommerce.Models.Product", b =>
@@ -159,7 +148,7 @@ namespace GroupProject_Ecommerce.Migrations
 
                     b.HasIndex("MaterialId");
 
-                    b.ToTable("Products", (string)null);
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("GroupProject_Ecommerce.Models.User", b =>
@@ -386,17 +375,6 @@ namespace GroupProject_Ecommerce.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("GroupProject_Ecommerce.Models.Image", b =>
-                {
-                    b.HasOne("GroupProject_Ecommerce.Models.Product", "Product")
-                        .WithMany("Images")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Product");
-                });
-
             modelBuilder.Entity("GroupProject_Ecommerce.Models.Product", b =>
                 {
                     b.HasOne("GroupProject_Ecommerce.Models.Brand", "Brand")
@@ -488,11 +466,6 @@ namespace GroupProject_Ecommerce.Migrations
             modelBuilder.Entity("GroupProject_Ecommerce.Models.Material", b =>
                 {
                     b.Navigation("Products");
-                });
-
-            modelBuilder.Entity("GroupProject_Ecommerce.Models.Product", b =>
-                {
-                    b.Navigation("Images");
                 });
 
             modelBuilder.Entity("GroupProject_Ecommerce.Models.User", b =>
