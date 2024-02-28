@@ -11,8 +11,6 @@ namespace GroupProject_Ecommerce.Models
         public Product Product { get; set; }
 
         public string UserId { get; set; }
-
-        [ForeignKey("UserId")]
         public User User { get; set; }
 
         public int Quantity { get; set; }

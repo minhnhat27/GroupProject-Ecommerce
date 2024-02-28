@@ -16,9 +16,9 @@
         public Brand Brand { get; set; }
         public Category Category { get; set; }
         public Material Material { get; set; }
-        public ICollection<Image> Images { get; set; }
-        public ICollection<CartItem> CartItems { get; set; }
-        public ICollection<OrderDetail> OrderDetails { get; set; }
+        public ICollection<Image> Images { get; set; } = new List<Image>();
+        public ICollection<CartItem> CartItems { get; set; } = new List<CartItem>();
+        public ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
 
 
     }

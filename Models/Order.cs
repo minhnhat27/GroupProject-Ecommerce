@@ -8,10 +8,9 @@ namespace GroupProject_Ecommerce.Models
     {
         public int Id { get; set; }
         public float Total { get; set; }
-        public float ShippingCost { get; set; }
-        public string UserId { get; set; }
+        public float ShippingCost { get; set; } 
 
-        [ForeignKey("UserId")]
+        public string UserId { get; set; }
         public User User { get; set; }
 
         public string Status { get; set; }
