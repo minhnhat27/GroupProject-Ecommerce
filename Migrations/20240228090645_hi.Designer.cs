@@ -4,6 +4,7 @@ using GroupProject_Ecommerce.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GroupProject_Ecommerce.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    partial class MyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240228090645_hi")]
+    partial class hi
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -172,30 +175,6 @@ namespace GroupProject_Ecommerce.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Orders");
-                });
-
-            modelBuilder.Entity("GroupProject_Ecommerce.Models.OrderDetail", b =>
-                {
-                    b.Property<int>("OrderId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
-                    b.Property<float>("ProductCost")
-                        .HasColumnType("real");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.Property<float>("UnitPrice")
-                        .HasColumnType("real");
-
-                    b.HasKey("OrderId", "ProductId");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("OrderDetails");
                 });
 
             modelBuilder.Entity("GroupProject_Ecommerce.Models.Product", b =>
@@ -510,25 +489,6 @@ namespace GroupProject_Ecommerce.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("GroupProject_Ecommerce.Models.OrderDetail", b =>
-                {
-                    b.HasOne("GroupProject_Ecommerce.Models.Order", "Order")
-                        .WithMany("OrderDetails")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("GroupProject_Ecommerce.Models.Product", "Product")
-                        .WithMany("OrderDetails")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Order");
-
-                    b.Navigation("Product");
-                });
-
             modelBuilder.Entity("GroupProject_Ecommerce.Models.Product", b =>
                 {
                     b.HasOne("GroupProject_Ecommerce.Models.Brand", "Brand")
@@ -622,18 +582,11 @@ namespace GroupProject_Ecommerce.Migrations
                     b.Navigation("Products");
                 });
 
-            modelBuilder.Entity("GroupProject_Ecommerce.Models.Order", b =>
-                {
-                    b.Navigation("OrderDetails");
-                });
-
             modelBuilder.Entity("GroupProject_Ecommerce.Models.Product", b =>
                 {
                     b.Navigation("CartItems");
 
                     b.Navigation("Images");
-
-                    b.Navigation("OrderDetails");
                 });
 
             modelBuilder.Entity("GroupProject_Ecommerce.Models.User", b =>

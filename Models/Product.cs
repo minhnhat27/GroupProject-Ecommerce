@@ -18,6 +18,8 @@
         public Material Material { get; set; }
         public ICollection<Image> Images { get; set; }
         public ICollection<CartItem> CartItems { get; set; }
+        public ICollection<OrderDetail> OrderDetails { get; set; }
+
 
     }
 }
