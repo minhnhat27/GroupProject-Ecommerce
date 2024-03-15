@@ -33,6 +33,19 @@
 	<link href="~/plugins/jquery-nice-select/css/nice-select.css" rel="stylesheet">
 
 	<link href="~/css/style.css" rel="stylesheet"> *@
+
+	<!--Link cua Checkout-->
+	<!-- Themefisher Icon font -->
+	<link rel="stylesheet" href="~/plugins/themefisher-font/style.css">
+	<!-- Animate css -->
+	<link rel="stylesheet" href="~/plugins/animate/animate.css">
+	<!-- Slick Carousel -->
+	<link rel="stylesheet" href="~/plugins/slick/slick.css">
+	<link rel="stylesheet" href="~/plugins/slick/slick-theme.css">
+
+	<!-- Main Stylesheet -->
+	<link rel="stylesheet" href="~/css/checkout.css">
+
 </head>
 <body class="animsition">
     <!-- Header -->
@@ -79,10 +92,6 @@
 							<li >
 								<a href="/User/Profile">My Profile</a>
 							</li>
-
-							
-
-							
 						</ul>
 					</div>	
 
@@ -358,7 +367,7 @@
 		</span>
 	</div>
 
-	<!-- Modal1 -->
+	@* <!-- Modal1 -->
 	<div class="wrap-modal1 js-modal1 p-t-60 p-b-20">
 		<div class="overlay-modal1 js-hide-modal1"></div>
 
@@ -511,7 +520,7 @@
 			</div>
 		</div>
 	</div>
-
+ *@
 	<script src="~/vendor/jquery/jquery-3.2.1.min.js"></script>
 	<script src="~/vendor/animsition/js/animsition.min.js"></script>
 	<script src="~/vendor/bootstrap/js/popper.js"></script>
@@ -576,12 +585,12 @@
 
 		/*---------------------------------------------*/
 
-		$('.js-addcart-detail').each(function () {
-			var nameProduct = $(this).parent().parent().parent().parent().find('.js-name-detail').html();
-			$(this).on('click', function () {
-				swal(nameProduct, "is added to cart !", "success");
-			});
-		});
+		// $('.js-addcart-detail').each(function () {
+		// 	var nameProduct = $(this).parent().parent().parent().parent().find('.js-name-detail').html();
+		// 	$(this).on('click', function () {
+		// 		swal(nameProduct, "is added to cart !", "success");
+		// 	});
+		// });
 
 	</script>
 	<script src="~/vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
@@ -601,7 +610,6 @@
 		});
 	</script>
 	<script src="~/js/main.js"></script>
-
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
