@@ -1,12 +1,15 @@
 ﻿using GroupProject_Ecommerce.Data;
 using GroupProject_Ecommerce.Models;
 using GroupProject_Ecommerce.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
 
 namespace GroupProject_Ecommerce.Controllers
 {
+	[Authorize]
 	public class CartController : Controller
 	{
 		private readonly MyDbContext _DbContext;
@@ -16,7 +19,13 @@ namespace GroupProject_Ecommerce.Controllers
 		}
 		public async Task<IActionResult> ShoppingCart()
 		{
-			var userId = "1001";
+			var user = User.FindFirst(ClaimTypes.NameIdentifier);
+			if (user == null)
+			{
+				return RedirectToAction("Login", "Account");
+			}
+			string userId = user.Value;
+
 			var listItem = await _DbContext.CartItems
 				.Where(e => e.UserId == userId)
 				.Select(e => new CartItemModel
@@ -36,7 +45,13 @@ namespace GroupProject_Ecommerce.Controllers
 		[HttpPost]
 		public async Task<IActionResult> ChangeQuantity(int productId, int quantity)
 		{
-			var userId = "1001";
+			var user = User.FindFirst(ClaimTypes.NameIdentifier);
+			if (user == null)
+			{
+				return RedirectToAction("Login", "Account");
+			}
+			string userId = user.Value;
+
 			var cartItem = await _DbContext.CartItems
 				.Where(e => e.UserId == userId && e.ProductId == productId)
 				.SingleOrDefaultAsync();
@@ -55,7 +70,13 @@ namespace GroupProject_Ecommerce.Controllers
 		{
 			try
 			{
-				var userId = "1001";
+				var user = User.FindFirst(ClaimTypes.NameIdentifier);
+				if (user == null)
+				{
+					return RedirectToAction("Login", "Account");
+				}
+				string userId = user.Value;
+
 				var cartItem = await _DbContext.CartItems
 					.Where(e => e.UserId == userId && e.ProductId == productId)
 					.SingleOrDefaultAsync();
@@ -77,7 +98,13 @@ namespace GroupProject_Ecommerce.Controllers
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> DeleteAllCartItem()
 		{
-			var userId = "1001";
+			var user = User.FindFirst(ClaimTypes.NameIdentifier);
+			if (user == null)
+			{
+				return RedirectToAction("Login", "Account");
+			}
+			string userId = user.Value;
+
 			var cartItem = await _DbContext.CartItems
 				.Where(e => e.UserId == userId)
 				.ToListAsync();
@@ -95,7 +122,13 @@ namespace GroupProject_Ecommerce.Controllers
 		{
 			try
 			{
-				var userId = "1001";
+				var user = User.FindFirst(ClaimTypes.NameIdentifier);
+				if (user == null)
+				{
+					return RedirectToAction("Login", "Account");
+				}
+				string userId = user.Value;
+
 				var cartItem = await _DbContext.CartItems
 					.SingleOrDefaultAsync(e => e.UserId == userId && e.ProductId == productId);
 				if (cartItem == null)
