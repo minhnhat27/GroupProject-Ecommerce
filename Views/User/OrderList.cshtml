@@ -1,0 +1,156 @@
+﻿@model IEnumerable<GroupProject_Ecommerce.Models.Order>
+
+@{
+    ViewData["Title"] = "Thông tin cá nhân";
+    Layout = "~/Views/Shared/_ProfileLayout.cshtml";
+}
+
+<section class="user-profile section">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-4">
+				<div class="sidebar-dashboard">
+					<!-- User Widget -->
+					<div class="widget user">
+						<!-- User Image -->
+						<div class="image d-flex justify-content-center">
+							<img src="~/images/user/user-thumb.jpg" alt="" class="">
+						</div>
+						<!-- User Name -->
+						<h5 class="text-center">@ViewBag.FullName</h5>
+					</div>
+					<!-- Dashboard Links -->
+					<div class="widget user-dashboard-menu">
+						<ul>
+							<li><a asp-controller="User" asp-action="Profile">Thông tin cá nhân</a></li>
+							<li><a asp-controller="User" asp-action="Edit">Chỉnh sửa thông tin cá nhân</a></li>
+							<li><a asp-controller="User" asp-action="ChangePassword">Đổi mật khẩu</a></li>
+							<li><a asp-controller="User" asp-action="ChangeEmail">Đổi email</a></li>
+							<li><a asp-controller="User" asp-action="OrderList">Lịch sử đơn hàng</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-8">
+				<div class="widget dashboard-container my-adslist">
+					<h3 class="widget-header">Lịch sử đơn hàng</h3>
+					<table class="table table-responsive product-dashboard-table">
+						<thead>
+							<tr>
+								<th class ="text-center">Mã đơn</th>
+								<th class="text-center">Tổng tiền</th>
+								<th class="text-center">Ngày đặt</th>
+								<th class="text-center">Trạng thái</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td class="product-thumb">
+									<img width="80px" height="auto" src="images/products/products-1.jpg" alt="image description">
+								</td>
+								<td class="product-details">
+									<h3 class="title">Macbook Pro 15inch</h3>
+									<span class="add-id"><strong>Ad ID:</strong> ng3D5hAMHPajQrM</span>
+									<span><strong>Posted on: </strong><time>Jun 27, 2017</time> </span>
+									<span class="status active"><strong>Status</strong>Active</span>
+									<span class="location"><strong>Location</strong>Dhaka,Bangladesh</span>
+								</td>
+								<td class="product-category"><span class="categories">Laptops</span></td>
+								<td class="action" data-title="Action">
+									<div class="">
+										<ul class="list-inline justify-content-center">
+											<li class="list-inline-item">
+												<a data-toggle="tooltip" data-placement="top" title="view" class="view" href="category.html">
+													<i class="fa fa-eye"></i>
+												</a>
+											</li>
+
+										</ul>
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<td class="product-thumb">
+									<img width="80px" height="auto" src="images/products/products-1.jpg" alt="image description">
+								</td>
+								<td class="product-details">
+									<h3 class="title">Macbook Pro 15inch</h3>
+									<span class="add-id"><strong>Ad ID:</strong> ng3D5hAMHPajQrM</span>
+									<span><strong>Posted on: </strong><time>Jun 27, 2017</time> </span>
+									<span class="status active"><strong>Status</strong>Active</span>
+									<span class="location"><strong>Location</strong>Dhaka,Bangladesh</span>
+								</td>
+								<td class="product-category"><span class="categories">Laptops</span></td>
+								<td class="action" data-title="Action">
+									<div class="">
+										<ul class="list-inline justify-content-center">
+											<li class="list-inline-item">
+												<a data-toggle="tooltip" data-placement="top" title="view" class="view" href="category.html">
+													<i class="fa fa-eye"></i>
+												</a>
+											</li>
+
+										</ul>
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<td class="product-thumb">
+									<img width="80px" height="auto" src="images/products/products-1.jpg" alt="image description">
+								</td>
+								<td class="product-details">
+									<h3 class="title">Macbook Pro 15inch</h3>
+									<span class="add-id"><strong>Ad ID:</strong> ng3D5hAMHPajQrM</span>
+									<span><strong>Posted on: </strong><time>Jun 27, 2017</time> </span>
+									<span class="status active"><strong>Status</strong>Active</span>
+									<span class="location"><strong>Location</strong>Dhaka,Bangladesh</span>
+								</td>
+								<td class="product-category"><span class="categories">Laptops</span></td>
+								<td class="action" data-title="Action">
+									<div class="">
+										<ul class="list-inline justify-content-center">
+											<li class="list-inline-item">
+												<a data-toggle="tooltip" data-placement="top" title="view" class="view" href="category.html">
+													<i class="fa fa-eye"></i>
+												</a>
+											</li>
+
+										</ul>
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<td class="product-thumb">
+									<img width="80px" height="auto" src="images/products/products-1.jpg" alt="image description">
+								</td>
+								<td class="product-details">
+									<h3 class="title">Macbook Pro 15inch</h3>
+									<span class="add-id"><strong>Ad ID:</strong> ng3D5hAMHPajQrM</span>
+									<span><strong>Posted on: </strong><time>Jun 27, 2017</time> </span>
+									<span class="status active"><strong>Status</strong>Active</span>
+									<span class="location"><strong>Location</strong>Dhaka,Bangladesh</span>
+								</td>
+								<td class="product-category"><span class="categories">Laptops</span></td>
+								<td class="action" data-title="Action">
+									<div class="">
+										<ul class="list-inline justify-content-center">
+											<li class="list-inline-item">
+												<a data-toggle="tooltip" data-placement="top" title="view" class="view" href="category.html">
+													<i class="fa fa-eye"></i>
+												</a>
+											</li>
+
+										</ul>
+									</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+
+				</div>
+
+			</div>
+		</div>
+	</div>
+</section>
+
