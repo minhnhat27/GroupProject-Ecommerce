@@ -13,7 +13,15 @@ builder.Services.AddDbContext<MyDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
-builder.Services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<MyDbContext>();
+builder.Services.AddIdentity<User, IdentityRole>(opt =>
+{
+    opt.Password.RequiredUniqueChars = 1;
+    opt.Password.RequireUppercase = true;
+    opt.Password.RequiredLength = 6;
+    opt.Password.RequireNonAlphanumeric = true;
+    opt.Password.RequireLowercase = false;
+
+}).AddEntityFrameworkStores<MyDbContext>();
 
 builder.Services.AddTransient<ISendMailService, SendMailService>();
 builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));

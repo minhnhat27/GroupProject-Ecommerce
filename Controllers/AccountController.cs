@@ -25,13 +25,18 @@ namespace GroupProject_Ecommerce.Controllers
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> Login(LoginModel model)
 		{
-                    return RedirectToAction("Index", "Home");
+			if (ModelState.IsValid)
+			{
+				var result = await _signInManager.PasswordSignInAsync(model.UserName, model.Password, false, false);
+				if (result.Succeeded)
+				{
+					return RedirectToAction("Index", "Home");
 
-                }
+				}
 				ModelState.AddModelError("", "Invalid login attempt");
-			return View(model);
+				return View(model);
 
-            }
+			}
 			//_signInManager.PasswordSignInAsync()
 			return View(model);
 		}
@@ -48,26 +53,26 @@ namespace GroupProject_Ecommerce.Controllers
 			{
 				User user = new()
 				{
-					FirstName=model.FirstName,
-					LastName=model.LastName,
+					FirstName = model.FirstName,
+					LastName = model.LastName,
 					UserName = model.UserName,
 					PhoneNumber = model.PhoneNumber,
 					Email = model.Email,
-					City=model.City,
-					CreateTime=DateTime.Now,
+					City = model.City,
+					CreateTime = DateTime.Now,
 				};
-				var result = await _userManager.CreateAsync(user,model.Password);
+				var result = await _userManager.CreateAsync(user, model.Password);
 				if (result.Succeeded)
 				{
 					//await _signInManager.SignInAsync(user, false);
-                    return RedirectToAction("Login", "Account");
+					return RedirectToAction("Login", "Account");
 
-                }
+				}
 				foreach (var error in result.Errors)
 				{
 					ModelState.AddModelError("", error.Description);
 				}
-            }
+			}
 			return View(model);
 		}
 
@@ -76,6 +81,5 @@ namespace GroupProject_Ecommerce.Controllers
 			await _signInManager.SignOutAsync();
 			return RedirectToAction("Index", "Home");
 		}
-
 	}
 }
