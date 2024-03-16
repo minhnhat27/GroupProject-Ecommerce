@@ -1,4 +1,5 @@
-﻿
+﻿@using GroupProject_Ecommerce.ViewModels;
+@model RegisterModel
 @{
     ViewData["Title"] = "Register";
     Layout = "~/Views/Shared/_LoginLayout.cshtml";
@@ -11,13 +12,43 @@
             <div class="col-lg-5 col-md-8 align-item-center">
                 <div class="border border">
                     <h3 class="bg-gray p-4">Register Now</h3>
-                    <form action="#">
+                    <form asp-action="Register" method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <fieldset class="p-4">
-                            <input class="form-control mb-4" type="email" placeholder="Username*" required>
-                            <input class="form-control mb-4" type="email" placeholder="Phone*" required>
-                            <input class="form-control mb-4" type="email" placeholder="Email*" required>
-                            <input class="form-control mb-4" type="password" placeholder="Password*" required>
-                            <input class="form-control mb-4" type="password" placeholder="Confirm Password*" required>
+                            <div>
+                                <input asp-for="FirstName" class="form-control mb-4" placeholder="FirstName">
+                                <span asp-validation-for="FirstName" class="text-danger"></span>
+                            </div>
+                            <div>
+                                <input asp-for="LastName" class="form-control mb-4" placeholder="LastName">
+                                <span asp-validation-for="LastName" class="text-danger"></span>
+                            </div>
+                            <div>
+                                <input asp-for="UserName" class="form-control mb-4" placeholder="Username">
+                                <span asp-validation-for="UserName" class="text-danger"></span>
+                            </div>
+                            <div>
+                                <input asp-for="PhoneNumber" class="form-control mb-4" placeholder="PhoneNumber">
+                                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                            </div>
+                            <div>
+                                <input asp-for="Email" class="form-control mb-4" placeholder="Email">
+                                <span asp-validation-for="Email" class="text-danger"></span>
+                            </div>
+                            <div>
+                                <label asp-for="City" class="form-control mb-4" placeholder="City"></label>
+                                <textarea asp-for="City" class="form-control mb-4" rows="2"></textarea>
+                                <span asp-validation-for="City" class="text-danger"></span>
+                            </div>
+                            <div>
+                                <input asp-for="Password" class="form-control mb-4" placeholder="Password">
+                                <span asp-validation-for="Password" class="text-danger"></span>
+                            </div>
+                            <div>
+                                <input asp-for="ConfirmPassword" class="form-control mb-4" placeholder="Confirm Password">
+                                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                            </div>
+
                             <button type="submit" class="btn-login">Register</button>
                         </fieldset>
                     </form>
