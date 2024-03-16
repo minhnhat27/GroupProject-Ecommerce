@@ -4,9 +4,11 @@ namespace GroupProject_Ecommerce.ViewModels
 {
 	public class LoginModel
 	{
-		[Required]
-		public string UserName { get; set; }
-		[Required] 
-		public string Password { get; set; }
+		[Required(ErrorMessage ="Username is required.")]
+		public string? UserName { get; set; }
+
+		[Required(ErrorMessage ="Password is required.")]
+		[DataType(DataType.Password)]
+        public string? Password { get; set; }
 	}
 }
