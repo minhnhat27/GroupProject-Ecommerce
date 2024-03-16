@@ -2,6 +2,7 @@
 using GroupProject_Ecommerce.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace GroupProject_Ecommerce.Controllers
 {
@@ -21,15 +22,64 @@ namespace GroupProject_Ecommerce.Controllers
 		}
 
 		[HttpPost]
-		public IActionResult Login(LoginModel model)
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> Login(LoginModel model)
 		{
+			if (ModelState.IsValid)
+			{
+				var result = await _signInManager.PasswordSignInAsync(model.UserName, model.Password, false, false);
+				if (result.Succeeded)
+				{
+					return RedirectToAction("Index", "Home");
+
+				}
+				ModelState.AddModelError("", "Invalid login attempt");
+				return View(model);
+
+			}
 			//_signInManager.PasswordSignInAsync()
-			return RedirectToAction("Index", "Home");
+			return View(model);
 		}
 
 		public IActionResult Register()
 		{
 			return View();
+		}
+
+		[HttpPost]
+		public async Task<IActionResult> Register(RegisterModel model)
+		{
+			if (ModelState.IsValid)
+			{
+				User user = new()
+				{
+					FirstName = model.FirstName,
+					LastName = model.LastName,
+					UserName = model.UserName,
+					PhoneNumber = model.PhoneNumber,
+					Email = model.Email,
+					City = model.City,
+					CreateTime = DateTime.Now,
+				};
+				var result = await _userManager.CreateAsync(user, model.Password);
+				if (result.Succeeded)
+				{
+					//await _signInManager.SignInAsync(user, false);
+					return RedirectToAction("Login", "Account");
+
+				}
+				foreach (var error in result.Errors)
+				{
+					ModelState.AddModelError("", error.Description);
+				}
+			}
+			return View(model);
+		}
+
+		public async Task<IActionResult> Logout()
+		{
+			await _signInManager.SignOutAsync();
+			return RedirectToAction("Index", "Home");
 		}
 	}
 }

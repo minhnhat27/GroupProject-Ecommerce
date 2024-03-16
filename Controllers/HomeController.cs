@@ -5,6 +5,7 @@ using System.Diagnostics;
 
 namespace GroupProject_Ecommerce.Controllers
 {
+    //[Authorize]
     public class HomeController : Controller
     {
         public IActionResult Index()
