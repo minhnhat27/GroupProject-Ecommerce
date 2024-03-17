@@ -12,7 +12,7 @@ namespace GroupProject_Ecommerce.Models
         public Product Product { get; set; } 
 
         public int Quantity { get; set; } 
-        public float ProductCost { get; set; } 
-        public float UnitPrice { get; set; } 
+        public double ProductCost { get; set; } 
+        public double UnitPrice { get; set; } 
     }
 }
