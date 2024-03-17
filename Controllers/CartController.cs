@@ -28,17 +28,10 @@ namespace GroupProject_Ecommerce.Controllers
 
 			var listItem = await _DbContext.CartItems
 				.Where(e => e.UserId == userId)
-				.Select(e => new CartItemModel
-				{
-					Product = e.Product,
-					Quantity = e.Quantity,
-					ImageURL = e.Product.Images.First().Url
-				}).ToListAsync();
-			ViewBag.EmptyCart = false;
-			if (listItem.IsNullOrEmpty())
-			{
-				ViewBag.EmptyCart = true;
-			}
+				.Include(e => e.Product)
+				.Include(e => e.Product.Images)
+				.ToListAsync();
+
 			return View(listItem);
 		}
 
@@ -154,7 +147,91 @@ namespace GroupProject_Ecommerce.Controllers
 			}
 		}
 
-		public IActionResult Checkout()
+		public async Task<IActionResult> Checkout()
+		{
+			var user = User.FindFirst(ClaimTypes.NameIdentifier);
+			if (user == null)
+			{
+				return RedirectToAction("Login", "Account");
+			}
+			string userId = user.Value;
+
+			var listItem = await _DbContext.CartItems
+				.Where(e => e.UserId == userId)
+				.Include(e => e.Product)
+				.Include(e => e.Product.Images)
+				.ToListAsync();
+
+			if (listItem.IsNullOrEmpty())
+			{
+				return NotFound();
+			}
+			return View(listItem);
+		}
+
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> ProcessCheckoutCOD()
+		{
+			try
+			{
+				var user = User.FindFirst(ClaimTypes.NameIdentifier);
+				if (user == null)
+				{
+					return RedirectToAction("Login", "Account");
+				}
+				string userId = user.Value;
+
+				var listCart = await _DbContext.CartItems
+					.Include(ci => ci.Product)
+					.Where(ci => ci.UserId == userId)
+					.ToListAsync();
+
+				double total = 0;
+				foreach (var cartItem in listCart)
+					total += cartItem.Product.Price * cartItem.Quantity;
+
+				var order = new Order
+				{
+					UserId = userId,
+					Status = DeliveryStatus.Processing.ToString(),
+					Date = DateTime.Now,
+					ShippingCost = 0,
+					Total = total,
+					PayMethod = PayMethod.COD.ToString(),
+					OrderDetails = new List<OrderDetail>()
+				};
+
+				await _DbContext.Orders.AddAsync(order);
+				await _DbContext.SaveChangesAsync();
+
+				foreach (var cartItem in listCart)
+				{
+					var orderDetail = new OrderDetail
+					{
+						OrderId = order.Id,
+						ProductId = cartItem.ProductId,
+						Quantity = cartItem.Quantity,
+						ProductCost = cartItem.Product.Price * cartItem.Quantity,
+						UnitPrice = cartItem.Product.Price
+					};
+					await _DbContext.OrderDetails.AddAsync(orderDetail);
+				}
+
+				_DbContext.CartItems.RemoveRange(listCart);
+				await _DbContext.SaveChangesAsync();
+
+				return RedirectToAction("Profile", "User");
+			}
+			catch
+			{
+				return RedirectToAction("ShoppingCart");
+			}
+		}
+
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> ProcessCheckoutVNPay()
 		{
 			return View();
 		}
