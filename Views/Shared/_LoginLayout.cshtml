@@ -586,7 +586,11 @@
 		});
 	</script>
 	<script src="~/js/main.js"></script>
-
+		<script>
+		$.get("/Cart/CountCartItem",(res) => {
+			$(".icon-header-noti").attr('data-notify', res)
+		})
+	</script>
 
 	<script src="~/lib/jquery/dist/jquery.min.js"></script>
 	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

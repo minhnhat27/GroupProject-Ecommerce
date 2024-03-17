@@ -300,7 +300,6 @@ else
 			var data = { productId: productId, quantity: quantity }
 
 			$.post('/Cart/ChangeQuantity', data, () => {
-				console.log('Success');
 				location.reload()
 			})
 		});

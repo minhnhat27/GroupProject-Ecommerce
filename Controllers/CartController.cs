@@ -35,6 +35,21 @@ namespace GroupProject_Ecommerce.Controllers
 			return View(listItem);
 		}
 
+		[HttpGet]
+		public int CountCartItem()
+		{
+			var user = User.FindFirst(ClaimTypes.NameIdentifier);
+			if (user == null)
+			{
+				return 0;
+			}
+			string userId = user.Value;
+
+			var quantity = _DbContext.CartItems
+				.Where(e => e.UserId == userId).Count();
+			return quantity;
+		}
+
 		[HttpPost]
 		public async Task<IActionResult> ChangeQuantity(int productId, int quantity)
 		{

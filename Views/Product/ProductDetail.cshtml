@@ -125,6 +125,9 @@
 
 			$.post('/Cart/AddToCart', data, () => {
 				swal(name, "đã được thêm vào giỏ hàng!", "success");
+				$.get("/Cart/CountCartItem",(res) => {
+					$(".icon-header-noti").attr('data-notify', res)
+				})
 			}).fail(() => { swal(name, "Error", "error") })
 		})
 	</script>
