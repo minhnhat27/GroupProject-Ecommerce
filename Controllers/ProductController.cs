@@ -1,4 +1,5 @@
 ﻿using GroupProject_Ecommerce.Data;
+using GroupProject_Ecommerce.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,7 +15,15 @@ namespace GroupProject_Ecommerce.Controllers
 
 		public IActionResult Index()
 		{
-			return View();
+			var viewModel = new HomeViewModel
+			{
+				Categories = _dbContext.Categories.ToList(),
+				ImagesWithProducts = _dbContext.Images
+					.Include(img => img.Product)
+					.ToList()
+			};
+
+			return View(viewModel);
 		}
 
 		[HttpGet]

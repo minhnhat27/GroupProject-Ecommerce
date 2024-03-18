@@ -1,0 +1,13 @@
+From: MagicShop_Admin <carro1420@gmail.com>
+Date: Mon, 18 Mar 2024 21:11:56 +0700
+Subject: =?utf-8?b?WMOhYyBuaOG6rW4gxJHhurd0IGjDoG5n?=
+Message-Id: <DJDVH2HHKMU4.8OSIQ21ACNMF2@desktop-s6ujrmk>
+Sender: MagicShop_Admin <carro1420@gmail.com>
+To: thanhb2005691@student.ctu.edu.vn
+MIME-Version: 1.0
+Content-Type: text/html; charset=utf-8
+
+<h2>Xác nhận đặt hàng ( phương thức thanh toán COD)</h2>
+   <p>Cảm ơn bạn đã đặt hàng tại cửa hàng của chúng tôi. Đơn hàng của bạn đã được nhận và đang được xử lý.</p>
+535: 5.7.8 Username and Password not accepted. For more information, go to
+5.7.8  https://support.google.com/mail/?p=BadCredentials jx18-20020a170903139200b001dcc2847655sm9287654plb.176 - gsmtp
