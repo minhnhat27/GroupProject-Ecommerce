@@ -1,5 +1,6 @@
 using GroupProject_Ecommerce.Data;
 using GroupProject_Ecommerce.Models;
+using GroupProject_Ecommerce.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using webapi.Services;
@@ -22,6 +23,9 @@ builder.Services.AddIdentity<User, IdentityRole>(opt =>
     opt.Password.RequireLowercase = false;
 
 }).AddEntityFrameworkStores<MyDbContext>();
+
+//VnPay
+builder.Services.AddSingleton<IVnPayService, VnPayService>();
 
 builder.Services.AddTransient<ISendMailService, SendMailService>();
 builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
