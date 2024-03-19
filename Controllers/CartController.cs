@@ -358,7 +358,7 @@ namespace GroupProject_Ecommerce.Controllers
 
 				// Gửi email xác nhận đặt hàng
 				var email = User.FindFirstValue(ClaimTypes.Email);
-				var subject = "MAGIC SHOP - Xác nhận đặt hàng ( phương thức thanh toán COD)";
+				var subject = "MAGIC SHOP - Xác nhận đặt hàng ( phương thức thanh toán VnPay )";
 				var htmlMessage =
 					"<p>Xin chào!,</p>\r\n   " +
 					"<p>Cảm ơn bạn đã đặt hàng tại cửa hàng của chúng tôi. Đơn hàng của bạn đã được nhận và đang được xử lý.</p>" +
