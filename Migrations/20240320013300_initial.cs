@@ -228,9 +228,11 @@ namespace GroupProject_Ecommerce.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Total = table.Column<float>(type: "real", nullable: false),
+                    Total = table.Column<double>(type: "float", nullable: false),
                     ShippingCost = table.Column<float>(type: "real", nullable: false),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    PayMethod = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Paid = table.Column<bool>(type: "bit", nullable: false),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -338,8 +340,8 @@ namespace GroupProject_Ecommerce.Migrations
                     OrderId = table.Column<int>(type: "int", nullable: false),
                     ProductId = table.Column<int>(type: "int", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false),
-                    ProductCost = table.Column<float>(type: "real", nullable: false),
-                    UnitPrice = table.Column<float>(type: "real", nullable: false)
+                    ProductCost = table.Column<double>(type: "float", nullable: false),
+                    UnitPrice = table.Column<double>(type: "float", nullable: false)
                 },
                 constraints: table =>
                 {
