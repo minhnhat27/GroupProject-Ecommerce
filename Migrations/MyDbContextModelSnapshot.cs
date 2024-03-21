@@ -115,17 +115,10 @@ namespace GroupProject_Ecommerce.Migrations
 
             modelBuilder.Entity("GroupProject_Ecommerce.Models.DeliveryStatus", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("Id");
+                    b.HasKey("Name");
 
                     b.ToTable("DeliveryStatus");
                 });
@@ -184,14 +177,16 @@ namespace GroupProject_Ecommerce.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("DeliveryStatusId")
-                        .HasColumnType("int");
+                    b.Property<string>("DeliveryStatusName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<bool>("Paid")
                         .HasColumnType("bit");
 
-                    b.Property<int>("PayMethodId")
-                        .HasColumnType("int");
+                    b.Property<string>("PayMethodName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<float>("ShippingCost")
                         .HasColumnType("real");
@@ -205,9 +200,9 @@ namespace GroupProject_Ecommerce.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DeliveryStatusId");
+                    b.HasIndex("DeliveryStatusName");
 
-                    b.HasIndex("PayMethodId");
+                    b.HasIndex("PayMethodName");
 
                     b.HasIndex("UserId");
 
@@ -240,17 +235,10 @@ namespace GroupProject_Ecommerce.Migrations
 
             modelBuilder.Entity("GroupProject_Ecommerce.Models.PayMethod", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("Id");
+                    b.HasKey("Name");
 
                     b.ToTable("PayMethods");
                 });
@@ -563,13 +551,13 @@ namespace GroupProject_Ecommerce.Migrations
                 {
                     b.HasOne("GroupProject_Ecommerce.Models.DeliveryStatus", "DeliveryStatus")
                         .WithMany("Orders")
-                        .HasForeignKey("DeliveryStatusId")
+                        .HasForeignKey("DeliveryStatusName")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("GroupProject_Ecommerce.Models.PayMethod", "PayMethod")
                         .WithMany("Orders")
-                        .HasForeignKey("PayMethodId")
+                        .HasForeignKey("PayMethodName")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

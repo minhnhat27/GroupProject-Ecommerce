@@ -49,8 +49,8 @@ namespace GroupProject_Ecommerce.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-            ViewData["DeliveryStatusId"] = new SelectList(_context.DeliveryStatus, "Id", "Name", order.DeliveryStatusId);
-            ViewData["PayMethodId"] = new SelectList(_context.PayMethods, "Id", "Name", order.PayMethodId);
+            ViewData["DeliveryStatusName"] = new SelectList(_context.DeliveryStatus, "Name", "Name", order.DeliveryStatusName);
+            ViewData["PayMethodName"] = new SelectList(_context.PayMethods, "Name", "Name", order.PayMethodName);
             return View(order);
         }
 
@@ -59,7 +59,7 @@ namespace GroupProject_Ecommerce.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Total,ShippingCost,UserId,PayMethodId,Paid,Date,DeliveryStatusId")] Order order)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Total,ShippingCost,UserId,PayMethodName,Paid,Date,DeliveryStatusName")] Order order)
         {
             if (id != order.Id)
             {
@@ -86,8 +86,8 @@ namespace GroupProject_Ecommerce.Areas.Admin.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["DeliveryStatusId"] = new SelectList(_context.DeliveryStatus, "Id", "Id", order.DeliveryStatusId);
-            ViewData["PayMethodId"] = new SelectList(_context.PayMethods, "Id", "Id", order.PayMethodId);
+            ViewData["DeliveryStatusName"] = new SelectList(_context.DeliveryStatus, "Name", "Name", order.DeliveryStatusName);
+            ViewData["PayMethodName"] = new SelectList(_context.PayMethods, "Name", "Name", order.PayMethodName);
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id", order.UserId);
             return View(order);
         }

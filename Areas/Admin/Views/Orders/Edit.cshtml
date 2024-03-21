@@ -17,8 +17,7 @@
                 <input type="hidden" asp-for="Id" />
                 <div class="form-group">
                     <label asp-for="UserId" class="control-label"></label>
-                    <input asp-for="UserId" class="form-control" type="hidden" />
-                    <input class="form-control" value="@Model.User.UserName" readonly />
+                    <input asp-for="UserId" class="form-control" readonly/>
                     <span asp-validation-for="UserId" class="text-danger"></span>
                 </div>
                 <div class="form-group">
@@ -38,8 +37,8 @@
                 </div>
                 <div class="form-group">
                     Phương thức thanh toán
-                    <select asp-for="PayMethodId" class="form-control" asp-items="ViewBag.PayMethodId"></select>
-                    <span asp-validation-for="PayMethodId" class="text-danger"></span>
+                    <select asp-for="PayMethodName" class="form-control" asp-items="ViewBag.PayMethodName"></select>
+                    <span asp-validation-for="PayMethodName" class="text-danger"></span>
                 </div>
                 <div class="form-group form-check">
                     <label class="form-check-label">
@@ -49,11 +48,12 @@
                 
                 <div class="form-group">
                     Trạng thái đơn hàng
-                    <select asp-for="DeliveryStatusId" class="form-control" asp-items="ViewBag.DeliveryStatusId"></select>
-                    <span asp-validation-for="DeliveryStatusId" class="text-danger"></span>
+                    <select asp-for="DeliveryStatusName" class="form-control" asp-items="ViewBag.DeliveryStatusName"></select>
+                    <span asp-validation-for="DeliveryStatusName" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <input type="submit" value="Save" class="btn btn-primary" />
+                    <input type="submit" value="Save" class="btn btn-primary" /> | 
+                    <a asp-action="Index" class="btn btn-info">Quay lại</a>
                 </div>
             </form>
         </div>
@@ -77,9 +77,6 @@
             </table>
         </div>
     </div>
-</div>
-<div>
-    <a asp-action="Index">Quay lại</a>
 </div>
 
 @section Scripts {

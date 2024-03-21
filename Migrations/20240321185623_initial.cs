@@ -87,13 +87,11 @@ namespace GroupProject_Ecommerce.Migrations
                 name: "DeliveryStatus",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_DeliveryStatus", x => x.Id);
+                    table.PrimaryKey("PK_DeliveryStatus", x => x.Name);
                 });
 
             migrationBuilder.CreateTable(
@@ -114,13 +112,11 @@ namespace GroupProject_Ecommerce.Migrations
                 name: "PayMethods",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PayMethods", x => x.Id);
+                    table.PrimaryKey("PK_PayMethods", x => x.Name);
                 });
 
             migrationBuilder.CreateTable(
@@ -262,7 +258,8 @@ namespace GroupProject_Ecommerce.Migrations
                     Enable = table.Column<bool>(type: "bit", nullable: false),
                     BrandId = table.Column<int>(type: "int", nullable: false),
                     CategoryId = table.Column<int>(type: "int", nullable: false),
-                    MaterialId = table.Column<int>(type: "int", nullable: false)
+                    MaterialId = table.Column<int>(type: "int", nullable: false),
+                    DiscountPercent = table.Column<float>(type: "real", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -296,10 +293,10 @@ namespace GroupProject_Ecommerce.Migrations
                     Total = table.Column<double>(type: "float", nullable: false),
                     ShippingCost = table.Column<float>(type: "real", nullable: false),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    PayMethodId = table.Column<int>(type: "int", nullable: false),
+                    PayMethodName = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Paid = table.Column<bool>(type: "bit", nullable: false),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DeliveryStatusId = table.Column<int>(type: "int", nullable: false)
+                    DeliveryStatusName = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -311,16 +308,16 @@ namespace GroupProject_Ecommerce.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Orders_DeliveryStatus_DeliveryStatusId",
-                        column: x => x.DeliveryStatusId,
+                        name: "FK_Orders_DeliveryStatus_DeliveryStatusName",
+                        column: x => x.DeliveryStatusName,
                         principalTable: "DeliveryStatus",
-                        principalColumn: "Id",
+                        principalColumn: "Name",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Orders_PayMethods_PayMethodId",
-                        column: x => x.PayMethodId,
+                        name: "FK_Orders_PayMethods_PayMethodName",
+                        column: x => x.PayMethodName,
                         principalTable: "PayMethods",
-                        principalColumn: "Id",
+                        principalColumn: "Name",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -463,14 +460,14 @@ namespace GroupProject_Ecommerce.Migrations
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Orders_DeliveryStatusId",
+                name: "IX_Orders_DeliveryStatusName",
                 table: "Orders",
-                column: "DeliveryStatusId");
+                column: "DeliveryStatusName");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Orders_PayMethodId",
+                name: "IX_Orders_PayMethodName",
                 table: "Orders",
-                column: "PayMethodId");
+                column: "PayMethodName");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Orders_UserId",

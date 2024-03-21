@@ -1,9 +1,11 @@
-﻿namespace GroupProject_Ecommerce.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace GroupProject_Ecommerce.Models
 {
     public class PayMethod
     {
-       public int Id { get; set; }
-       public string Name { get; set; }
+        [Key]
+        public string Name { get; set; }
         public ICollection<Order> Orders { get; set; } = new List<Order>();
     }
 }

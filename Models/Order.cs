@@ -13,14 +13,14 @@ namespace GroupProject_Ecommerce.Models
         public string UserId { get; set; }
         public User? User { get; set; }
 
-        public int PayMethodId { get; set; }
+        public string PayMethodName { get; set; }
         public PayMethod? PayMethod { get; set; }
 
         public bool Paid { get; set; } = false;
 
         public DateTime Date { get; set; }
 
-        public int DeliveryStatusId { get; set; }
+        public string DeliveryStatusName { get; set; }
         public DeliveryStatus? DeliveryStatus { get; set; }
 
         public ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
