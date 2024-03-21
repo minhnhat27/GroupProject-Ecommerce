@@ -1,0 +1,98 @@
+﻿@model GroupProject_Ecommerce.Models.Product
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Areas/Admin/Shared/_Layout.cshtml";
+}
+
+<h1>Tạo sản phẩm</h1>
+
+<h4>Sản phẩm</h4>
+<hr />
+<div class="row">
+    <div class="col-md-6 offset-md-3">
+        <form asp-action="Create" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Size" class="control-label"></label>
+                <input asp-for="Size" class="form-control" />
+                <span asp-validation-for="Size" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Price" class="control-label"></label>
+                <input asp-for="Price" class="form-control" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Inventory" class="control-label"></label>
+                <input asp-for="Inventory" class="form-control" />
+                <span asp-validation-for="Inventory" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Enable" /> @Html.DisplayNameFor(model => model.Enable)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="Brand" class="control-label"></label>
+                <select asp-for="BrandId" class ="form-control" asp-items="ViewBag.BrandId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Category" class="control-label"></label>
+                <select asp-for="CategoryId" class ="form-control" asp-items="ViewBag.CategoryId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Material" class="control-label"></label>
+                <select asp-for="MaterialId" class ="form-control" asp-items="ViewBag.MaterialId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Images" class="control-label"></label>
+                <div class="d-flex list-Pic overflow-auto"></div>
+                <input type="file" name="files" id="fileInput" multiple class="mt-3">
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Thêm" class="btn btn-primary" /> |
+                <a asp-action="Index" class="btn btn-info">Quay lại</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        var preview = $('.list-Pic');
+        $('#fileInput').on('change', function () {
+            var files = this.files;
+            preview.children().remove();
+
+            for (var i = 0; i < files.length; i++) {
+                var file = files[i];
+                if (!file.type.startsWith('image/')) {
+                    continue;
+                }
+
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    var img = document.createElement('img');
+                    img.width = 150
+                    img.height = 150
+                    img.src = e.target.result
+                    preview.append(img)
+                };
+                reader.readAsDataURL(file);
+            }
+
+        })
+    </script>
+}

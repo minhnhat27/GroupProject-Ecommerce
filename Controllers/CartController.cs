@@ -213,11 +213,11 @@ namespace GroupProject_Ecommerce.Controllers
                 var order = new Order
                 {
                     UserId = userId,
-                    Status = DeliveryStatus.Processing.ToString(),
+                    DeliveryStatusId = 1,
                     Date = DateTime.Now,
                     ShippingCost = 0,
                     Total = total,
-                    PayMethod = PayMethod.COD.ToString(),
+                    PayMethodId = 1,
                     OrderDetails = new List<OrderDetail>()
                 };
 

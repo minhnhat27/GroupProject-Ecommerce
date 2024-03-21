@@ -1,0 +1,122 @@
+﻿@model IEnumerable<GroupProject_Ecommerce.Models.Product>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Shared/_Layout.cshtml";
+}
+
+<h1>Sản phẩm</h1>
+
+<p>
+    <a asp-action="Create">Thêm sản phẩm mới</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Ảnh
+            </th>
+            <th>
+                Tên sản phẩm
+            </th>
+            <th>
+                Mô tả
+            </th>
+            <th>
+                Kích cở
+            </th>
+            <th>
+                Giá
+            </th>
+            <th>
+                Giảm giá
+            </th>
+            <th>
+                Kho
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Enable)
+            </th>
+            <th>
+                Thương hiệu
+            </th>
+            <th>
+                Danh mục
+            </th>
+            <th>
+                Chất liệu
+            </th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <div class="how-itemcart1">
+                        @{
+                            var img = item.Images.FirstOrDefault();
+                            if(img != null)
+                            {
+                                <img src="~/images/Product/@img.Url" alt="IMG">
+                            }
+                            else
+                            {
+                                <img alt="Chưa có ảnh">
+                            }
+                        }
+                        
+                    </div>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @{
+                        if(item.Description != null)
+                        {
+                            if (item.Description.Length > 150)
+                            {
+                                Write(item.Description.Substring(0, 150) + "...");
+                            }
+                            else
+                            {
+                                Write(item.Description);
+                            }
+                        }
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Size)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DiscountPercent)%
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Inventory)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Enable)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Brand.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Category.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Material.Name)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

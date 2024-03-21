@@ -1,0 +1,11 @@
+From: MagicShop_Admin <minhnhat0123401@gmail.com>
+Date: Thu, 21 Mar 2024 18:39:48 +0700
+Subject: 1
+Message-Id: <3PE6YVDDLMU4.R8CK8EPX6WUB2@msi>
+Sender: MagicShop_Admin <minhnhat0123401@gmail.com>
+To: minhnhat012340@gmail.com
+MIME-Version: 1.0
+Content-Type: text/html; charset=utf-8
+
+<div><div>21</div><table><tbody><tr><td><img width='100' height='100' src=cid:Logo0.jpg/></td><td style='padding: 0 15px'>Nhẫn Vàng 18K đính đá ECZ PNJ XMXMY010580</td><td><div><span style='text-decoration: line-through'>9,127,000</span><span style='color: red'>-0%</span></div><div>Chỉ còn:<span style='color: red'>9,127,000</span></div><div style='margin-top: 3px'><a style='text-decoration:none; border: 1px solid; padding: 4px; border-radius: 2px; background-color: cyan' href=https://localhost:44322/Product/ProductDetail/2>Mua ngay</a></div></td></tr><tr><td><img width='100' height='100' src=cid:Logo1.jpg/></td><td style='padding: 0 15px'>Nhẫn bạc đính ngọc trai PNJSilver PMXMW060003</td><td><div><span style='text-decoration: line-through'>715,000</span><span style='color: red'>-0%</span></div><div>Chỉ còn:<span style='color: red'>715,000</span></div><div style='margin-top: 3px'><a style='text-decoration:none; border: 1px solid; padding: 4px; border-radius: 2px; background-color: cyan' href=https://localhost:44322/Product/ProductDetail/3>Mua ngay</a></div></td></tr></tbody></table></div>
+A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond.

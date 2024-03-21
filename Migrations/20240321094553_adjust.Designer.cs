@@ -12,15 +12,15 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GroupProject_Ecommerce.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    [Migration("20240318003313_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20240321094553_adjust")]
+    partial class adjust
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.2")
+                .HasAnnotation("ProductVersion", "8.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -116,6 +116,23 @@ namespace GroupProject_Ecommerce.Migrations
                     b.ToTable("Categories");
                 });
 
+            modelBuilder.Entity("GroupProject_Ecommerce.Models.DeliveryStatus", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("DeliveryStatus");
+                });
+
             modelBuilder.Entity("GroupProject_Ecommerce.Models.Image", b =>
                 {
                     b.Property<int>("Id")
@@ -170,19 +187,17 @@ namespace GroupProject_Ecommerce.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("DeliveryStatusId")
+                        .HasColumnType("int");
+
                     b.Property<bool>("Paid")
                         .HasColumnType("bit");
 
-                    b.Property<string>("PayMethod")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("PayMethodId")
+                        .HasColumnType("int");
 
                     b.Property<float>("ShippingCost")
                         .HasColumnType("real");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<double>("Total")
                         .HasColumnType("float");
@@ -192,6 +207,10 @@ namespace GroupProject_Ecommerce.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("DeliveryStatusId");
+
+                    b.HasIndex("PayMethodId");
 
                     b.HasIndex("UserId");
 
@@ -222,6 +241,23 @@ namespace GroupProject_Ecommerce.Migrations
                     b.ToTable("OrderDetails");
                 });
 
+            modelBuilder.Entity("GroupProject_Ecommerce.Models.PayMethod", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PayMethods");
+                });
+
             modelBuilder.Entity("GroupProject_Ecommerce.Models.Product", b =>
                 {
                     b.Property<int>("Id")
@@ -238,6 +274,9 @@ namespace GroupProject_Ecommerce.Migrations
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<float>("DiscountPercent")
+                        .HasColumnType("real");
 
                     b.Property<bool>("Enable")
                         .HasColumnType("bit");
@@ -525,11 +564,27 @@ namespace GroupProject_Ecommerce.Migrations
 
             modelBuilder.Entity("GroupProject_Ecommerce.Models.Order", b =>
                 {
+                    b.HasOne("GroupProject_Ecommerce.Models.DeliveryStatus", "DeliveryStatus")
+                        .WithMany("Orders")
+                        .HasForeignKey("DeliveryStatusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("GroupProject_Ecommerce.Models.PayMethod", "PayMethod")
+                        .WithMany("Orders")
+                        .HasForeignKey("PayMethodId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("GroupProject_Ecommerce.Models.User", "User")
                         .WithMany("Orders")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("DeliveryStatus");
+
+                    b.Navigation("PayMethod");
 
                     b.Navigation("User");
                 });
@@ -641,6 +696,11 @@ namespace GroupProject_Ecommerce.Migrations
                     b.Navigation("Products");
                 });
 
+            modelBuilder.Entity("GroupProject_Ecommerce.Models.DeliveryStatus", b =>
+                {
+                    b.Navigation("Orders");
+                });
+
             modelBuilder.Entity("GroupProject_Ecommerce.Models.Material", b =>
                 {
                     b.Navigation("Products");
@@ -649,6 +709,11 @@ namespace GroupProject_Ecommerce.Migrations
             modelBuilder.Entity("GroupProject_Ecommerce.Models.Order", b =>
                 {
                     b.Navigation("OrderDetails");
+                });
+
+            modelBuilder.Entity("GroupProject_Ecommerce.Models.PayMethod", b =>
+                {
+                    b.Navigation("Orders");
                 });
 
             modelBuilder.Entity("GroupProject_Ecommerce.Models.Product", b =>

@@ -1,10 +1,10 @@
 ﻿namespace GroupProject_Ecommerce.Models
 {
-    public enum DeliveryStatus
+    public class DeliveryStatus
     {
-        Processing,
-        Confirmed,
-        Shipping,
-        Received
+        public int Id { get; set; }
+        public string Name { get; set; }
+
+        public ICollection<Order> Orders { get; set; } = new List<Order>();
     }
 }

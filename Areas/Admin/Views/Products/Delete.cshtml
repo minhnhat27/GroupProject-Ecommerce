@@ -1,0 +1,76 @@
+﻿@model GroupProject_Ecommerce.Models.Product
+
+@{
+    ViewData["Title"] = "Delete";
+    Layout = "~/Areas/Admin/Shared/_Layout.cshtml";
+}
+
+<h1>Xóa sản phẩm</h1>
+
+<h3>Bạn có chắc chắn muốn xóa sản phẩm này không?</h3>
+<div>
+    <h4>Sản phẩm</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            Tên sản phẩm
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class="col-sm-2">
+            Mô tả
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt class="col-sm-2">
+            Kích cở
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Size)
+        </dd>
+        <dt class="col-sm-2">
+            Giá
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Price)
+        </dd>
+        <dt class="col-sm-2">
+            Kho
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Inventory)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Enable)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Enable)
+        </dd>
+        <dt class="col-sm-2">
+            Thương hiệu
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Brand.Name)
+        </dd>
+        <dt class="col-sm-2">
+            Danh mục
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Category.Name)
+        </dd>
+        <dt class="col-sm-2">
+            Chất liệu
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Material.Name)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Xóa ngay" class="btn btn-danger" /> |
+        <a asp-action="Index" class="btn btn-info">Quay về</a>
+    </form>
+</div>
