@@ -1,5 +1,6 @@
 ﻿using GroupProject_Ecommerce.Models;
 using GroupProject_Ecommerce.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
@@ -7,6 +8,7 @@ using Newtonsoft.Json;
 
 namespace GroupProject_Ecommerce.Controllers
 {
+	[AllowAnonymous]
 	public class AccountController : Controller
 	{
 		private readonly UserManager<User> _userManager;
@@ -35,8 +37,11 @@ namespace GroupProject_Ecommerce.Controllers
 				var result = await _signInManager.PasswordSignInAsync(model.UserName, model.Password, false, false);
 				if (result.Succeeded)
 				{
+					if (User.IsInRole("Admin"))
+					{
+                        return RedirectToAction("Index", "Products", new { area = "Admin" });
+                    }
 					return RedirectToAction("Index", "Home");
-
 				}
 				ModelState.AddModelError("", "Invalid login attempt");
 				return View(model);

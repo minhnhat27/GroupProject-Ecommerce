@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using GroupProject_Ecommerce.ViewModels;
 
 namespace GroupProject_Ecommerce.Data
 {
@@ -20,5 +21,7 @@ namespace GroupProject_Ecommerce.Data
 
         public DbSet<City> Cities { get; set;}
 
+        public DbSet<PayMethod> PayMethods { get; set; }
+        public DbSet<DeliveryStatus> DeliveryStatus { get; set; }
     }
 }

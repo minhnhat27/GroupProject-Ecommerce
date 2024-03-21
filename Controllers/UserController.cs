@@ -195,9 +195,9 @@ namespace GroupProject_Ecommerce.Controllers
                 OrderViewModel i = new OrderViewModel();
                 i.Id = o.Id;
                 i.Total = o.Total;
-                i.Status = o.Status;
+                i.Status = o.DeliveryStatusName;
                 i.Date = o.Date;
-                i.PayMethod = o.PayMethod;
+                i.PayMethod = o.PayMethodName;
                 int pId = _context.OrderDetails.Where(x => x.OrderId == o.Id).First().ProductId;
                 string img = _context.Images.Where(x => x.ProductId == pId).First().Url;
 				i.Images = img;

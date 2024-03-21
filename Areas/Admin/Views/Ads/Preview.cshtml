@@ -1,0 +1,67 @@
+﻿@model GroupProject_Ecommerce.ViewModels.PreviewMailModel
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div>@Model.Title</div>
+    <hr />
+    <div class="row">
+        <div class="col-md-6">
+            <div>@Model.Body</div>
+            <table>
+                <tbody>
+                    @foreach (var item in Model.Products)
+                    {
+                        <tr>
+                            <td>
+                                <img width="100" height="100" src="~/images/Product/@item.Images.First().Url" />
+                            </td>
+                            <td style="padding: 0 15px">
+                                @item.Name
+                            </td>
+                            <td>
+                                <div>
+                                    <span style="text-decoration: line-through">@item.Price.ToString("#,##")</span>
+                                    <span style="color: red">-@item.DiscountPercent%</span>
+                                </div>
+                                <div>
+                                    Chỉ còn:
+                                    <span style="color: red">
+                                        @{
+                                            var p = item.Price - item.Price * (item.DiscountPercent / 100);
+                                            Write(p.ToString("#,##"));
+                                        }
+                                    </span>
+                                </div>
+                                <div style="margin-top: 3px">
+                                    @{
+                                        var strHref = "https://localhost:44322/Product/ProductDetail/" + @item.Id;
+                                        <a style="text-decoration:none; border: 1px solid; padding: 4px; border-radius: 2px; background-color: cyan" href=@strHref>Mua ngay</a>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-6">
+            <span> Danh sách người nhận:</span>
+            <ul>
+                @foreach (var item in Model.Receivers)
+                {
+                    <li>@item</li>
+                }
+            </ul>
+
+        </div>
+    </div>
+
+    <div>
+        <a class="btn btn-primary" asp-action="SendMail">Gửi ngay</a> |
+        <a class="btn btn-info" asp-action="Index">Hủy</a>
+    </div>
+</div>

@@ -1,10 +1,12 @@
-﻿namespace GroupProject_Ecommerce.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace GroupProject_Ecommerce.Models
 {
-    public enum DeliveryStatus
+    public class DeliveryStatus
     {
-        Processing,
-        Confirmed,
-        Shipping,
-        Received
+        [Key]
+        public string Name { get; set; }
+
+        public ICollection<Order> Orders { get; set; } = new List<Order>();
     }
 }

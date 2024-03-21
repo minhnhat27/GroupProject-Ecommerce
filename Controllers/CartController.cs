@@ -218,11 +218,11 @@ namespace GroupProject_Ecommerce.Controllers
                 var order = new Order
                 {
                     UserId = userId,
-                    Status = DeliveryStatus.Processing.ToString(),
+                    DeliveryStatusName = "Đang xử lý",
                     Date = DateTime.Now,
                     ShippingCost = 0,
                     Total = total,
-                    PayMethod = PayMethod.COD.ToString(),
+                    PayMethodName = "COD",
                     OrderDetails = new List<OrderDetail>()
                 };
 
@@ -328,12 +328,12 @@ namespace GroupProject_Ecommerce.Controllers
 				var order = new Order
 				{
 					UserId = userId,
-					Status = DeliveryStatus.Processing.ToString(),
+					DeliveryStatusName = "Đang xử lý",
 					Date = DateTime.Now,
 					ShippingCost = 0,
 					Total = total,
                     Paid = true,
-					PayMethod = PayMethod.VNPay.ToString(),
+					PayMethodName = "VNPay",
 					OrderDetails = new List<OrderDetail>()
 				};
 

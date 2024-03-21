@@ -84,6 +84,30 @@ namespace GroupProject_Ecommerce.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Cities",
+                columns: table => new
+                {
+                    province_id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    province_name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    province_type = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Cities", x => x.province_id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DeliveryStatus",
+                columns: table => new
+                {
+                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DeliveryStatus", x => x.Name);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Materials",
                 columns: table => new
                 {
@@ -95,6 +119,17 @@ namespace GroupProject_Ecommerce.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Materials", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PayMethods",
+                columns: table => new
+                {
+                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PayMethods", x => x.Name);
                 });
 
             migrationBuilder.CreateTable(
@@ -223,31 +258,6 @@ namespace GroupProject_Ecommerce.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Orders",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Total = table.Column<double>(type: "float", nullable: false),
-                    ShippingCost = table.Column<float>(type: "real", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    PayMethod = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Paid = table.Column<bool>(type: "bit", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Date = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Orders", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Orders_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Products",
                 columns: table => new
                 {
@@ -261,7 +271,8 @@ namespace GroupProject_Ecommerce.Migrations
                     Enable = table.Column<bool>(type: "bit", nullable: false),
                     BrandId = table.Column<int>(type: "int", nullable: false),
                     CategoryId = table.Column<int>(type: "int", nullable: false),
-                    MaterialId = table.Column<int>(type: "int", nullable: false)
+                    MaterialId = table.Column<int>(type: "int", nullable: false),
+                    DiscountPercent = table.Column<float>(type: "real", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -283,6 +294,43 @@ namespace GroupProject_Ecommerce.Migrations
                         column: x => x.MaterialId,
                         principalTable: "Materials",
                         principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Orders",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Total = table.Column<double>(type: "float", nullable: false),
+                    ShippingCost = table.Column<float>(type: "real", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    PayMethodName = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Paid = table.Column<bool>(type: "bit", nullable: false),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DeliveryStatusName = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Orders", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Orders_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Orders_DeliveryStatus_DeliveryStatusName",
+                        column: x => x.DeliveryStatusName,
+                        principalTable: "DeliveryStatus",
+                        principalColumn: "Name",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Orders_PayMethods_PayMethodName",
+                        column: x => x.PayMethodName,
+                        principalTable: "PayMethods",
+                        principalColumn: "Name",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -425,6 +473,16 @@ namespace GroupProject_Ecommerce.Migrations
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Orders_DeliveryStatusName",
+                table: "Orders",
+                column: "DeliveryStatusName");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Orders_PayMethodName",
+                table: "Orders",
+                column: "PayMethodName");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Orders_UserId",
                 table: "Orders",
                 column: "UserId");
@@ -470,6 +528,9 @@ namespace GroupProject_Ecommerce.Migrations
                 name: "CartItems");
 
             migrationBuilder.DropTable(
+                name: "Cities");
+
+            migrationBuilder.DropTable(
                 name: "Images");
 
             migrationBuilder.DropTable(
@@ -486,6 +547,12 @@ namespace GroupProject_Ecommerce.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "DeliveryStatus");
+
+            migrationBuilder.DropTable(
+                name: "PayMethods");
 
             migrationBuilder.DropTable(
                 name: "Brands");

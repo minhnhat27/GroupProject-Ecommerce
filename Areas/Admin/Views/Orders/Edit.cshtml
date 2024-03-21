@@ -1,0 +1,84 @@
+﻿@model GroupProject_Ecommerce.Models.Order
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Areas/Admin/Shared/_Layout.cshtml";
+}
+
+<h1>Chỉnh sửa đơn hàng</h1>
+
+<h4>Chi tiết đơn hàng</h4>
+<hr />
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <form asp-action="Edit">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="Id" />
+                <div class="form-group">
+                    <label asp-for="UserId" class="control-label"></label>
+                    <input asp-for="UserId" class="form-control" readonly/>
+                    <span asp-validation-for="UserId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    Ngày đặt hàng
+                    <input asp-for="Date" class="form-control" readonly/>
+                    <span asp-validation-for="Date" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    Tổng cộng
+                    <input asp-for="Total" class="form-control" readonly />
+                    <span asp-validation-for="Total" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    Phí vận chuyển
+                    <input asp-for="ShippingCost" class="form-control" />
+                    <span asp-validation-for="ShippingCost" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    Phương thức thanh toán
+                    <select asp-for="PayMethodName" class="form-control" asp-items="ViewBag.PayMethodName"></select>
+                    <span asp-validation-for="PayMethodName" class="text-danger"></span>
+                </div>
+                <div class="form-group form-check">
+                    <label class="form-check-label">
+                        <input class="form-check-input" asp-for="Paid" /> Xác nhận đã thanh toán
+                    </label>
+                </div>
+                
+                <div class="form-group">
+                    Trạng thái đơn hàng
+                    <select asp-for="DeliveryStatusName" class="form-control" asp-items="ViewBag.DeliveryStatusName"></select>
+                    <span asp-validation-for="DeliveryStatusName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-primary" /> | 
+                    <a asp-action="Index" class="btn btn-info">Quay lại</a>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-6">
+            <table class="">
+                <tr class="">
+                    <th class="column-1">Sản phẩm</th>
+                    <th class="column-2"></th>
+                </tr>
+                @foreach (var item in Model.OrderDetails)
+                {
+                    <tr class="table_row">
+                        <td class="column-1">
+                            <div class="how-itemcart1">
+                                <img src="~/images/Product/@item.Product.Images.First().Url" alt="IMG">
+                            </div>
+                        </td>
+                        <td class="column-2 pl-2">@item.Product.Name</td>
+                    </tr>
+                }
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
