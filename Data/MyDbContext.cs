@@ -18,9 +18,7 @@ namespace GroupProject_Ecommerce.Data
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }
 
-
-
-
+        public DbSet<City> Cities { get; set;}
 
     }
 }

@@ -1,4 +1,5 @@
 ﻿@using GroupProject_Ecommerce.ViewModels;
+@using GroupProject_Ecommerce.Models;
 @model RegisterModel
 @{
     ViewData["Title"] = "Register";
@@ -35,11 +36,22 @@
                                 <input asp-for="Email" class="form-control mb-4" placeholder="Email">
                                 <span asp-validation-for="Email" class="text-danger"></span>
                             </div>
-                            <div>
-                                <label asp-for="City" class="form-control mb-4" placeholder="City"></label>
-                                <textarea asp-for="City" class="form-control mb-4" rows="2"></textarea>
-                                <span asp-validation-for="City" class="text-danger"></span>
-                            </div>
+                            <select asp-for="City" class="form-control mb-4" onchange="setSelectedCity(this)">
+                                <option value="">Select a city</option>
+                                @foreach (var city in ViewBag.Cities)
+                                {
+                                    <option value="@city.province_name">@city.province_name</option>
+                                }
+                            </select>
+
+                            <input type="hidden" id="selectedCityInput" name="SelectedCityName" />
+
+                            <script>
+                                function setSelectedCity(selectElement) {
+                                    var selectedCity = selectElement.value;
+                                    document.getElementById("selectedCityInput").value = selectedCity;
+                                }
+                            </script>
                             <div>
                                 <input asp-for="Password" class="form-control mb-4" placeholder="Password">
                                 <span asp-validation-for="Password" class="text-danger"></span>
