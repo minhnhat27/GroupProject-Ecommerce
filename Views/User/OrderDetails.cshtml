@@ -1,0 +1,131 @@
+﻿@model IEnumerable<GroupProject_Ecommerce.Models.OrderDetail>
+@{
+    ViewData["Title"] = "Chi tiết đơn hàng";
+    Layout = "~/Views/Shared/_ProfileLayout.cshtml";
+}
+
+<section class="user-profile section">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-4">
+				<div class="sidebar-dashboard">
+					<!-- User Widget -->
+					<div class="widget user">
+						<!-- User Image -->
+						<div class="image d-flex justify-content-center">
+							<img src="~/images/user/user-thumb.jpg" alt="" class="">
+						</div>
+						<!-- User Name -->
+						<h5 class="text-center">@ViewBag.FullName</h5>
+					</div>
+					<!-- Dashboard Links -->
+					<div class="widget user-dashboard-menu">
+						<ul>
+							<li><a asp-controller="User" asp-action="Profile">Thông tin cá nhân</a></li>
+							<li><a asp-controller="User" asp-action="Edit">Chỉnh sửa thông tin cá nhân</a></li>
+							<li><a asp-controller="User" asp-action="ChangePassword">Đổi mật khẩu</a></li>
+							<li><a asp-controller="User" asp-action="ChangeEmail">Đổi email</a></li>
+							<li><a asp-controller="User" asp-action="OrderList">Lịch sử đơn hàng</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-8">
+				<div class="widget dashboard-container my-adslist">
+					<h2 class="widget-header">Thông tin đơn hàng</h2>
+					<dl class="row mt-2">
+						<dt class="col-sm-3">
+							Mã đơn hàng
+						</dt>
+						<dd class="col-sm-9">
+							@ViewBag.Order.Id
+						</dd>
+						<dt class="col-sm-3">
+							Ngày đặt
+						</dt>
+						<dd class="col-sm-9">
+							@ViewBag.Order.Date
+						</dd>
+						<dt class="col-sm-3">
+							Phương thức 
+						</dt>
+						<dd class="col-sm-9">
+							@ViewBag.Order.PayMethod
+						</dd>
+						<dt class="col-sm-3">
+							Trạng thái
+						</dt>
+						<dd class="col-sm-9">
+							@ViewBag.Order.Status
+						</dd>						
+						<dt class="col-sm-3">
+							Phí vận chuyển
+						</dt>
+						<dd class="col-sm-9">
+							0 &#x0111
+						</dd>
+						<dt class="col-sm-3">
+							Đã thanh toán
+						</dt>
+						<dd class="col-sm-9">
+							@ViewBag.Order.Paid
+						</dd>
+						<dt class="col-sm-3">
+							Tổng tiền
+						</dt>
+						<dd class="col-sm-9">
+							@ViewBag.Order.Total.ToString("#,##") &#x0111
+						</dd>
+					</dl>
+					<hr />
+					<h3 class="widget-header">Danh sách sản phẩm</h3>
+					<table class="table table-responsive product-dashboard-table">
+						<thead>
+							<tr>
+								<th class="text-center">
+									
+								</th>
+								<th class="text-center">
+									Sản phẩm
+								</th>
+								<th class="text-center">
+									Số lượng
+								</th>
+								<th class="text-center">
+									Đơn giá
+								</th>
+								<th class="text-center">
+									Thành tiền
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							@foreach (var item in Model)
+							{
+								<tr>
+									<td class="product-thumb">
+										<img width="100px" height="auto" src="~/images/Product/@item.Product.Images.First().Url" alt="image description">
+									</td>
+									<td class="text-center">
+										@item.Product.Name
+									</td>
+									<td class="text-center">
+										@item.Quantity
+									</td>
+									<td class="text-center">
+										@item.UnitPrice.ToString("#,##") &#x0111
+									</td>
+									<td class="text-center">
+										@item.ProductCost.ToString("#,##") &#x0111
+									</td>
+								</tr>
+							}
+						</tbody>
+					</table>
+
+				</div>
+
+			</div>
+		</div>
+	</div>
+</section>
