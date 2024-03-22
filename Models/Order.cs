@@ -23,7 +23,10 @@ namespace GroupProject_Ecommerce.Models
         public string DeliveryStatusName { get; set; }
         public DeliveryStatus? DeliveryStatus { get; set; }
 
-        public ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
+        public string DeliveryAddress { get; set; }
+        public string Receiver { get; set; }
+
+		public ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
     }
 
 }

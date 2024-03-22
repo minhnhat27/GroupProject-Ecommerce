@@ -195,6 +195,10 @@ namespace GroupProject_Ecommerce.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("DeliveryAddress")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("DeliveryStatusName")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -205,6 +209,10 @@ namespace GroupProject_Ecommerce.Migrations
                     b.Property<string>("PayMethodName")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Receiver")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<float>("ShippingCost")
                         .HasColumnType("real");

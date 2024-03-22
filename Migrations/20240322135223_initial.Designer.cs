@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GroupProject_Ecommerce.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    [Migration("20240321194636_initial")]
+    [Migration("20240322135223_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -198,6 +198,10 @@ namespace GroupProject_Ecommerce.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("DeliveryAddress")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("DeliveryStatusName")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -208,6 +212,10 @@ namespace GroupProject_Ecommerce.Migrations
                     b.Property<string>("PayMethodName")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Receiver")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<float>("ShippingCost")
                         .HasColumnType("real");

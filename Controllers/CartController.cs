@@ -190,12 +190,16 @@ namespace GroupProject_Ecommerce.Controllers
             {
                 return NotFound();
             }
+            var u = await _DbContext.Users.FindAsync(userId);
+            ViewBag.Name = u.FirstName + " "  + u.LastName;
+            ViewBag.Phone = u.PhoneNumber;
+
             return View(listItem);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ProcessCheckoutCOD()
+        public async Task<IActionResult> ProcessCheckoutCOD(IFormCollection forms)
         {
             try
             {
@@ -215,6 +219,9 @@ namespace GroupProject_Ecommerce.Controllers
                 foreach (var cartItem in listCart)
                     total += cartItem.Product.Price * cartItem.Quantity;
 
+                var address = forms["address"] + ", " + forms["ward"] + ", "
+                    + forms["district"] + ", " + forms["city"];
+                var rec = forms["phone"] + " " + forms["name"];
                 var order = new Order
                 {
                     UserId = userId,
@@ -223,6 +230,8 @@ namespace GroupProject_Ecommerce.Controllers
                     ShippingCost = 0,
                     Total = total,
                     PayMethodName = "COD",
+                    DeliveryAddress = address,
+                    Receiver = rec,
                     OrderDetails = new List<OrderDetail>()
                 };
 
@@ -268,7 +277,7 @@ namespace GroupProject_Ecommerce.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ProcessCheckoutVNPay()
+        public async Task<IActionResult> ProcessCheckoutVNPay(IFormCollection forms)
         {
 			var user = User.FindFirst(ClaimTypes.NameIdentifier);
 			if (user == null)
@@ -286,7 +295,15 @@ namespace GroupProject_Ecommerce.Controllers
 			foreach (var cartItem in listCart)
 				total += cartItem.Product.Price * cartItem.Quantity;
 
-			var vnPayModel = new VnPaymentRequestModel
+            var address = forms["address"] + ", " + forms["ward"] + ", "
+                    + forms["district"] + ", " + forms["city"];
+
+            var rec = forms["phone"] + " " + forms["name"];
+            ViewData["Address"] = address;
+            ViewData["Receiver"] = rec;
+
+
+            var vnPayModel = new VnPaymentRequestModel
             {
                 Amount = total,
                 CreatedDate = DateTime.Now,
@@ -325,13 +342,19 @@ namespace GroupProject_Ecommerce.Controllers
 				foreach (var cartItem in listCart)
 					total += cartItem.Product.Price * cartItem.Quantity;
 
-				var order = new Order
+
+                var rec = ViewData["Receiver"] as string;
+                var address = ViewData["Address"] as string;
+
+                var order = new Order
 				{
 					UserId = userId,
 					DeliveryStatusName = "Đang xử lý",
 					Date = DateTime.Now,
 					ShippingCost = 0,
 					Total = total,
+                    Receiver = rec ?? " ",
+                    DeliveryAddress = address ?? " ",
                     Paid = true,
 					PayMethodName = "VNPay",
 					OrderDetails = new List<OrderDetail>()
@@ -378,9 +401,8 @@ namespace GroupProject_Ecommerce.Controllers
 		}
 
 
-        public async Task<IActionResult> PaymentSuccess()
+        public IActionResult PaymentSuccess()
         {
-            
             return View();
         }
 
