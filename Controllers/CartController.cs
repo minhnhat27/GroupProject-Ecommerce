@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 using System.Security.Claims;
 using webapi.Services;
 
@@ -297,17 +298,47 @@ namespace GroupProject_Ecommerce.Controllers
 
             var address = forms["address"] + ", " + forms["ward"] + ", "
                     + forms["district"] + ", " + forms["city"];
-
             var rec = forms["phone"] + " " + forms["name"];
-            ViewData["Address"] = address;
-            ViewData["Receiver"] = rec;
+
+            var order = new Order
+            {
+                UserId = userId,
+                DeliveryStatusName = "Đang xử lý",
+                Date = DateTime.Now,
+                ShippingCost = 0,
+                Total = total,
+                Receiver = rec,
+                DeliveryAddress = address,
+                Paid = false,
+                PayMethodName = "VNPay",
+                OrderDetails = new List<OrderDetail>()
+            };
+
+            await _DbContext.Orders.AddAsync(order);
+            await _DbContext.SaveChangesAsync();
+
+            foreach (var cartItem in listCart)
+            {
+                var orderDetail = new OrderDetail
+                {
+                    OrderId = order.Id,
+                    ProductId = cartItem.ProductId,
+                    Quantity = cartItem.Quantity,
+                    ProductCost = cartItem.Product.Price * cartItem.Quantity,
+                    UnitPrice = cartItem.Product.Price
+                };
+                await _DbContext.OrderDetails.AddAsync(orderDetail);
+            }
+
+            _DbContext.CartItems.RemoveRange(listCart);
+            await _DbContext.SaveChangesAsync();
 
 
             var vnPayModel = new VnPaymentRequestModel
             {
                 Amount = total,
                 CreatedDate = DateTime.Now,
-                OrderId = 1,
+                OrderId = order.Id,
             };
 
 			return Redirect(_vnPayService.CreatePaymentUrl(HttpContext, vnPayModel));
@@ -321,83 +352,48 @@ namespace GroupProject_Ecommerce.Controllers
 
             if (response == null || response.VnPayResponseCode != "00")
             {
-                return RedirectToAction("ShoppingCart");
-			}
+                var email = User.FindFirstValue(ClaimTypes.Email);
+                var subject = "MAGIC SHOP - Thanh toán thất bại (VNPay)";
+                var htmlMessage =
+                    "<p>Xin chào!,</p>\r\n   " +
+                    "<p>Cảm ơn bạn đã đặt hàng tại cửa hàng của chúng tôi. Đơn hàng của bạn đã được nhận và đang được xử lý.</p>" +
+                    "<p>Vui lòng thanh toán lại sớm nhất có thể. Đơn hàng sẽ bị hủy sau 1 ngày nếu không được thanh toán</p>" +
+                    "<p>Chúc bạn một ngày tốt lành❤️</p>" +
+                "<br>" +
+                "<p>Thân mến," +
+                    "<p>Magic Shop</p>";
+                await _sendMailService.SendEmailAsync(email, subject, htmlMessage);
+                return RedirectToAction("OrderList", "User");
+            }
+            else
+            {
+                try
+                {
+                    var index = response.OrderDescription.LastIndexOf(":") + 1;
+                    var orderId = int.Parse(response.OrderDescription.Substring(index));
+                    var order = await _DbContext.Orders.SingleOrDefaultAsync(e => e.Id == orderId);
+                    order.Paid = true;
+                    await _DbContext.SaveChangesAsync();
 
-			try
-			{
-				var user = User.FindFirst(ClaimTypes.NameIdentifier);
-				if (user == null)
-				{
-					return RedirectToAction("Login", "Account");
-				}
-				string userId = user.Value;
-
-				var listCart = await _DbContext.CartItems
-					.Include(ci => ci.Product)
-					.Where(ci => ci.UserId == userId)
-					.ToListAsync();
-
-				double total = 0;
-				foreach (var cartItem in listCart)
-					total += cartItem.Product.Price * cartItem.Quantity;
-
-
-                var rec = ViewData["Receiver"] as string;
-                var address = ViewData["Address"] as string;
-
-                var order = new Order
-				{
-					UserId = userId,
-					DeliveryStatusName = "Đang xử lý",
-					Date = DateTime.Now,
-					ShippingCost = 0,
-					Total = total,
-                    Receiver = rec ?? " ",
-                    DeliveryAddress = address ?? " ",
-                    Paid = true,
-					PayMethodName = "VNPay",
-					OrderDetails = new List<OrderDetail>()
-				};
-
-				await _DbContext.Orders.AddAsync(order);
-				await _DbContext.SaveChangesAsync();
-
-				foreach (var cartItem in listCart)
-				{
-					var orderDetail = new OrderDetail
-					{
-						OrderId = order.Id,
-						ProductId = cartItem.ProductId,
-						Quantity = cartItem.Quantity,
-						ProductCost = cartItem.Product.Price * cartItem.Quantity,
-						UnitPrice = cartItem.Product.Price
-					};
-					await _DbContext.OrderDetails.AddAsync(orderDetail);
-				}
-
-				_DbContext.CartItems.RemoveRange(listCart);
-				await _DbContext.SaveChangesAsync();
-
-				// Gửi email xác nhận đặt hàng
-				var email = User.FindFirstValue(ClaimTypes.Email);
-				var subject = "MAGIC SHOP - Xác nhận đặt hàng ( phương thức thanh toán VnPay )";
-				var htmlMessage =
-					"<p>Xin chào!,</p>\r\n   " +
-					"<p>Cảm ơn bạn đã đặt hàng tại cửa hàng của chúng tôi. Đơn hàng của bạn đã được nhận và đang được xử lý.</p>" +
-					"<p>Chúng tôi hy vọng bạn sẽ hài lòng về sản phẩm.</p>" +
-					"<p>Chúc bạn một ngày tốt lành❤️</p>" +
-					"<br>" +
-					"<p>Thân mến," +
-					"<p>Magic Shop</p>";
-				await _sendMailService.SendEmailAsync(email, subject, htmlMessage);
-
-				return RedirectToAction("PaymentSuccess", "Cart");
-			}
-			catch
-			{
-				return RedirectToAction("ShoppingCart");
-			}
+                    // Gửi email xác nhận đặt hàng
+                    var email = User.FindFirstValue(ClaimTypes.Email);
+                    var subject = "MAGIC SHOP - Xác nhận đặt hàng (phương thức thanh toán VNPay)";
+                    var htmlMessage =
+                        "<p>Xin chào!,</p>\r\n   " +
+                        "<p>Cảm ơn bạn đã đặt hàng tại cửa hàng của chúng tôi. Đơn hàng của bạn đã được nhận và đang được xử lý.</p>" +
+                        "<p>Chúng tôi hy vọng bạn sẽ hài lòng về sản phẩm.</p>" +
+                        "<p>Chúc bạn một ngày tốt lành❤️</p>" +
+                        "<br>" +
+                        "<p>Thân mến," +
+                        "<p>Magic Shop</p>";
+                    await _sendMailService.SendEmailAsync(email, subject, htmlMessage);
+                    return RedirectToAction("PaymentSuccess", "Cart");
+                }
+                catch
+                {
+                    throw new Exception();
+                }
+            }
 		}
 
 
