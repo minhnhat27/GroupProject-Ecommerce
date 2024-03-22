@@ -258,7 +258,7 @@ namespace GroupProject_Ecommerce.Controllers
                     "<p>Magic Shop</p>";
                 await _sendMailService.SendEmailAsync(email, subject, htmlMessage);
 
-                return RedirectToAction("Profile", "User");
+                return RedirectToAction("PaymentSuccess", "Cart");
             }
             catch
             {
@@ -369,12 +369,20 @@ namespace GroupProject_Ecommerce.Controllers
 					"<p>Magic Shop</p>";
 				await _sendMailService.SendEmailAsync(email, subject, htmlMessage);
 
-				return RedirectToAction("Profile", "User");
+				return RedirectToAction("PaymentSuccess", "Cart");
 			}
 			catch
 			{
 				return RedirectToAction("ShoppingCart");
 			}
 		}
+
+
+        public async Task<IActionResult> PaymentSuccess()
+        {
+            
+            return View();
+        }
+
     }
 }
