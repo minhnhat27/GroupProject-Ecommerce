@@ -77,6 +77,14 @@
 							@ViewBag.Order.Total.ToString("#,##") &#x0111
 						</dd>
 					</dl>
+@* 					@if (ViewBag.Order.DeliveryStatusName == 0)
+					{
+						
+					}
+					*@					
+					<a asp-action="CancelOrder" class="btn btn-transparent">Huỷ đơn</a>
+					<a asp-action="" class="btn btn-transparent">Thanh toán ngay</a>
+
 					<hr />
 					<h3 class="widget-header">Danh sách sản phẩm</h3>
 					<table class="table table-responsive product-dashboard-table">
