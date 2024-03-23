@@ -218,7 +218,8 @@ namespace GroupProject_Ecommerce.Controllers
 
                 double total = 0;
                 foreach (var cartItem in listCart)
-                    total += cartItem.Product.Price * cartItem.Quantity;
+                    total += (cartItem.Product.Price - cartItem.Product.Price * (cartItem.Product.DiscountPercent / 100)) * cartItem.Quantity;
+                total = Math.Round(total);
 
                 var address = forms["address"] + ", " + forms["ward"] + ", "
                     + forms["district"] + ", " + forms["city"];
@@ -294,7 +295,8 @@ namespace GroupProject_Ecommerce.Controllers
 
 			double total = 0;
 			foreach (var cartItem in listCart)
-				total += cartItem.Product.Price * cartItem.Quantity;
+                total += (cartItem.Product.Price - cartItem.Product.Price * (cartItem.Product.DiscountPercent / 100)) * cartItem.Quantity;
+            total = Math.Round(total);
 
             var address = forms["address"] + ", " + forms["ward"] + ", "
                     + forms["district"] + ", " + forms["city"];
@@ -344,8 +346,32 @@ namespace GroupProject_Ecommerce.Controllers
 			return Redirect(_vnPayService.CreatePaymentUrl(HttpContext, vnPayModel));
         }
 
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> Repayment(int orderId)
+		{
+			var user = User.FindFirst(ClaimTypes.NameIdentifier);
+			if (user == null)
+			{
+				return RedirectToAction("Login", "Account");
+			}
+			string userId = user.Value;
+
+			var order = await _DbContext.Orders
+				.SingleOrDefaultAsync(e => e.Id == orderId);
+            if(order == null) { return NotFound(); }
+
+			var vnPayModel = new VnPaymentRequestModel
+			{
+				Amount = order.Total,
+				CreatedDate = DateTime.Now,
+				OrderId = order.Id,
+			};
+			return Redirect(_vnPayService.CreatePaymentUrl(HttpContext, vnPayModel));
+		}
+
 		// Lưu ý do phương thức này sử dụng URL của VNPAY nên đừng thêm HttpPost
-        // hay HttpGet và ValidateAntiForgeryToken ở phía trước nó sẽ khiến nó hoạt động không được
+		// hay HttpGet và ValidateAntiForgeryToken ở phía trước nó sẽ khiến nó hoạt động không được
 		public async Task<IActionResult> PaymentCallBack()
         {
             var response = _vnPayService.PaymentExecute(Request.Query);
@@ -402,5 +428,38 @@ namespace GroupProject_Ecommerce.Controllers
             return View();
         }
 
-    }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CancelOrder(int orderId)
+        {
+            var order = await _DbContext.Orders
+                .Include(e => e.OrderDetails)
+                .SingleOrDefaultAsync(e => e.Id == orderId);
+            if(order == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                if (order.DeliveryStatusName == "Đang xử lý" || order.DeliveryStatusName == "Đã xác nhận")
+                {
+                    foreach (var item in order.OrderDetails)
+                    {
+                        var product = await _DbContext.Products.SingleOrDefaultAsync(e => e.Id == item.ProductId);
+                        if (product != null)
+                        {
+                            product.Inventory += item.Quantity;
+                        }
+                    }
+                    order.DeliveryStatusName = "Đã hủy";
+                    await _DbContext.SaveChangesAsync();
+
+					return RedirectToAction("OrderList", "User");
+				}
+				else return NotFound();
+			}
+        }
+
+
+	}
 }

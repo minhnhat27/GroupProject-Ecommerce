@@ -59,7 +59,7 @@ namespace GroupProject_Ecommerce.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Total,ShippingCost,UserId,PayMethodName,Paid,Date,DeliveryStatusName")] Order order)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Total,ShippingCost,UserId,PayMethodName,Paid,Date,DeliveryStatusName,DeliveryAddress,Receiver")] Order order)
         {
             if (id != order.Id)
             {

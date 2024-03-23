@@ -35,16 +35,18 @@
                             <h4 class="widget-title">Tóm tắt đơn hàng</h4>
                             @{
                                 double subtotal = 0;
-                                foreach(var item in Model)
+                                foreach (var item in Model)
                                 {
-                                        <div class="media product-card">
-                                            <img class="media-object" src="~/images/Product/@item.Product.Images.First().Url" alt="Image" />
+                                    <div class="media product-card">
+                                        <img class="media-object" src="~/images/Product/@item.Product.Images.First().Url" alt="Image" />
                                             <div class="media-body">
                                                 <h4 class="media-heading"><a href="product-single.html">@item.Product.Name</a></h4>
-                                                <p class="price">@item.Quantity x @item.Product.Price.ToString("#,##") &#x0111</p>
+                                            <p class="price">@item.Quantity x @{
+                                                    var p = item.Product.Price - item.Product.Price * (item.Product.DiscountPercent / 100); Write(p.ToString("#,##"));
+                                            } &#x0111</p>
                                             </div>
                                         </div>
-                                    subtotal += item.Quantity * item.Product.Price;
+                                    subtotal += item.Quantity * p;
                                 }
                             }
 

@@ -31,6 +31,16 @@
                     <span asp-validation-for="Total" class="text-danger"></span>
                 </div>
                 <div class="form-group">
+                    Địa chỉ giao hàng
+                    <input asp-for="DeliveryAddress" class="form-control" readonly />
+                    <span asp-validation-for="DeliveryAddress" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    Người nhận
+                    <input asp-for="Receiver" class="form-control" readonly />
+                    <span asp-validation-for="Receiver" class="text-danger"></span>
+                </div>
+                <div class="form-group">
                     Phí vận chuyển
                     <input asp-for="ShippingCost" class="form-control" />
                     <span asp-validation-for="ShippingCost" class="text-danger"></span>

@@ -57,7 +57,22 @@
 								</a>
 
 								<span class="stext-105 cl3">
-									@product.Product.Price
+									@if(product.Product.DiscountPercent > 0.0){
+										<div>
+											<span style="text-decoration: line-through">@product.Product.Price.ToString("#,##") đ</span>
+											<span style="color: red">-@product.Product.DiscountPercent%</span>
+										</div>
+										<span style="color: red">
+											@{
+												var p = product.Product.Price - product.Product.Price * (product.Product.DiscountPercent / 100);
+												Write(p.ToString("#,##") + " đ");
+											}
+										</span>
+									}
+									else
+									{
+										Write(product.Product.Price.ToString("##,##") + " đ");
+									}
 								</span>
 							</div>
 

@@ -59,7 +59,23 @@
 					</h4>
 
 					<span class="mtext-106 cl2">
-						@Model.Price.ToString("#,##") &#x0111
+						@if(Model.DiscountPercent > 0.0)
+						{
+							<div>
+								<span style="text-decoration: line-through">@Model.Price.ToString("#,##") đ</span>
+								<span style="color: red">-@Model.DiscountPercent%</span>
+							</div>
+							<span style="color: red">
+								@{
+									var p = Model.Price - Model.Price * (Model.DiscountPercent / 100);
+									Write(p.ToString("#,##") + " đ");
+								}
+							</span>
+						}
+						else
+						{
+							Write(Model.Price.ToString("##,##") + " đ");
+						}
 					</span>
 					<!--  -->
 					<div class="p-t-33">
