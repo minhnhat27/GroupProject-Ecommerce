@@ -259,14 +259,51 @@ namespace GroupProject_Ecommerce.Controllers
                 // Gửi email xác nhận đặt hàng
                 var email = User.FindFirstValue(ClaimTypes.Email);
                 var subject = "MAGIC SHOP - Xác nhận đặt hàng ( phương thức thanh toán COD)";
+                var expectedDeliveryDate = DateTime.Now.AddDays(5);
+
+                // Lấy thông tin chi tiết đơn hàng
+                var orderDetails = "";
+                foreach (var cartItem in listCart)
+                {
+                    orderDetails += "<tr>" +
+                                    "<td>" + cartItem.Product.Name + "</td>" +
+                                    "<td>" + cartItem.Quantity + "</td>" +
+                                    "<td>" + (cartItem.Product.Price - cartItem.Product.Price * (cartItem.Product.DiscountPercent / 100)).ToString("N0") + " đ</td>" +
+                                    "<td>" + (cartItem.Product.Price * cartItem.Quantity).ToString("N0") + " đ</td>" +
+                                    "</tr>";
+                }
+
+                // Tạo HTML cho bảng chi tiết đơn hàng
+                var orderDetailsHtml =
+                    "<table>" +
+                    "<tr>" +
+                    "<th>Sản phẩm</th>" +
+                    "<th>Số lượng</th>" +
+                    "<th>Giá</th>" +
+                    "<th>Tổng cộng</th>" +
+                    "</tr>" +
+                    orderDetails +
+                    "</table>";
+
                 var htmlMessage =
-                    "<p>Xin chào!,</p>\r\n   " +
-                    "<p>Cảm ơn bạn đã đặt hàng tại cửa hàng của chúng tôi. Đơn hàng của bạn đã được nhận và đang được xử lý.</p>" +
-                    "<p>Chúng tôi hy vọng bạn sẽ hài lòng về sản phẩm.</p>" +
-                    "<p>Chúc bạn một ngày tốt lành❤️</p>" +
+                     "<p>Xin chào!,</p>\r\n   " +
+                     "<p>Cảm ơn bạn đã đặt hàng tại cửa hàng của chúng tôi. Đơn hàng của bạn đã được nhận và đang được xử lý.</p>" +
+                     "<p>Mã đơn hàng: " + order.Id + "</p>" +
+                     "<p>Ngày giao hàng dự kiến: " + expectedDeliveryDate.ToString("dd/MM/yyyy") + "</p>" +
+                     "<p>Thông tin chi tiết đơn hàng:</p>" +
+                     orderDetailsHtml +
+                     "<p>Địa chỉ giao hàng: " + address + "</p>" +
+                     "<p>Người nhận: " + rec + "</p>" +
+                     "<p>Tổng tiền: " + total.ToString("N0") + " đ</p>" +
+                     "<p>Chúng tôi hy vọng bạn sẽ hài lòng về sản phẩm.</p>" +
+                     "<p>Chúc bạn một ngày tốt lành❤️</p>" +
                     "<br>" +
-                    "<p>Thân mến," +
+                    "<p>Thân mến,</p>" +
                     "<p>Magic Shop</p>";
+
+
+
+
                 await _sendMailService.SendEmailAsync(email, subject, htmlMessage);
 
                 return RedirectToAction("PaymentSuccess", "Cart");
@@ -370,9 +407,11 @@ namespace GroupProject_Ecommerce.Controllers
 			return Redirect(_vnPayService.CreatePaymentUrl(HttpContext, vnPayModel));
 		}
 
-		// Lưu ý do phương thức này sử dụng URL của VNPAY nên đừng thêm HttpPost
-		// hay HttpGet và ValidateAntiForgeryToken ở phía trước nó sẽ khiến nó hoạt động không được
-		public async Task<IActionResult> PaymentCallBack()
+        // Lưu ý do phương thức này sử dụng URL của VNPAY nên đừng thêm HttpPost
+        // hay HttpGet và ValidateAntiForgeryToken ở phía trước nó sẽ khiến nó hoạt động không được
+        // Lưu ý: Đừng thêm HttpPost hay HttpGet và ValidateAntiForgeryToken ở phía trước nó
+        // Lưu ý: Đừng thêm HttpPost hay HttpGet và ValidateAntiForgeryToken ở phía trước nó
+        public async Task<IActionResult> PaymentCallBack()
         {
             var response = _vnPayService.PaymentExecute(Request.Query);
 
@@ -386,7 +425,7 @@ namespace GroupProject_Ecommerce.Controllers
                     "<p>Vui lòng thanh toán lại sớm nhất có thể. Đơn hàng sẽ bị hủy sau 1 ngày nếu không được thanh toán</p>" +
                     "<p>Chúc bạn một ngày tốt lành❤️</p>" +
                 "<br>" +
-                "<p>Thân mến," +
+                "<p>Thân mến,</p>" +
                     "<p>Magic Shop</p>";
                 await _sendMailService.SendEmailAsync(email, subject, htmlMessage);
                 return RedirectToAction("OrderList", "User");
@@ -397,22 +436,61 @@ namespace GroupProject_Ecommerce.Controllers
                 {
                     var index = response.OrderDescription.LastIndexOf(":") + 1;
                     var orderId = int.Parse(response.OrderDescription.Substring(index));
-                    var order = await _DbContext.Orders.SingleOrDefaultAsync(e => e.Id == orderId);
-                    order.Paid = true;
-                    await _DbContext.SaveChangesAsync();
+                    var order = await _DbContext.Orders
+                        .Include(o => o.OrderDetails)
+                        .ThenInclude(od => od.Product)
+                        .SingleOrDefaultAsync(e => e.Id == orderId);
+                    if (order == null)
+                    {
+                        return NotFound();
+                    }
+
+                    // Lấy thông tin chi tiết đơn hàng
+                    var orderDetails = "";
+                    foreach (var orderDetail in order.OrderDetails)
+                    {
+                        orderDetails += "<tr>" +
+                                        "<td>" + orderDetail.Product.Name + "</td>" +
+                                        "<td>" + orderDetail.Quantity + "</td>" +
+                                        "<td>" + orderDetail.UnitPrice.ToString("N0") + " đ</td>" +
+                                        "<td>" + (orderDetail.ProductCost).ToString("N0") + " đ</td>" +
+                                        "</tr>";
+                    }
+
+                    // Tạo HTML cho bảng chi tiết đơn hàng
+                    var orderDetailsHtml =
+                        "<table>" +
+                        "<tr>" +
+                        "<th>Sản phẩm</th>" +
+                        "<th>Số lượng</th>" +
+                        "<th>Giá</th>" +
+                        "<th>Tổng cộng</th>" +
+                        "</tr>" +
+                        orderDetails +
+                        "</table>";
 
                     // Gửi email xác nhận đặt hàng
                     var email = User.FindFirstValue(ClaimTypes.Email);
                     var subject = "MAGIC SHOP - Xác nhận đặt hàng (phương thức thanh toán VNPay)";
+                    var expectedDeliveryDate = DateTime.Now.AddDays(5);
+
                     var htmlMessage =
                         "<p>Xin chào!,</p>\r\n   " +
                         "<p>Cảm ơn bạn đã đặt hàng tại cửa hàng của chúng tôi. Đơn hàng của bạn đã được nhận và đang được xử lý.</p>" +
+                        "<p>Mã đơn hàng: " + order.Id + "</p>" +
+                        "<p>Ngày giao hàng dự kiến: " + expectedDeliveryDate.ToString("dd/MM/yyyy") + "</p>" +
+                        "<p>Thông tin chi tiết đơn hàng:</p>" +
+                        orderDetailsHtml +
+                        "<p>Địa chỉ giao hàng: " + order.DeliveryAddress + "</p>" +
+                        "<p>Người nhận: " + order.Receiver + "</p>" +
+                        "<p>Tổng tiền: " + order.Total.ToString("N0") + " đ</p>" +
                         "<p>Chúng tôi hy vọng bạn sẽ hài lòng về sản phẩm.</p>" +
                         "<p>Chúc bạn một ngày tốt lành❤️</p>" +
                         "<br>" +
-                        "<p>Thân mến," +
+                        "<p>Thân mến,</p>" +
                         "<p>Magic Shop</p>";
                     await _sendMailService.SendEmailAsync(email, subject, htmlMessage);
+
                     return RedirectToAction("PaymentSuccess", "Cart");
                 }
                 catch
@@ -420,7 +498,8 @@ namespace GroupProject_Ecommerce.Controllers
                     throw new Exception();
                 }
             }
-		}
+        }
+
 
 
         public IActionResult PaymentSuccess()
