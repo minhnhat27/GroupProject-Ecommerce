@@ -1,9 +1,12 @@
 using GroupProject_Ecommerce.Data;
 using GroupProject_Ecommerce.Models;
 using GroupProject_Ecommerce.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using webapi.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Google;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,6 +33,23 @@ builder.Services.AddSingleton<IVnPayService, VnPayService>();
 
 builder.Services.AddTransient<ISendMailService, SendMailService>();
 builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
+
+builder.Services
+    .AddAuthentication(options =>
+    {
+        options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+        //options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
+    })
+    .AddCookie()
+    .AddGoogle(options =>
+    {
+        options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+        options.ClientId = builder.Configuration.GetSection("GoogleKeys:ClientId").Value;
+        options.ClientSecret = builder.Configuration.GetSection("GoogleKeys:ClientSecret").Value;
+        options.SaveTokens = true;
+    });
+
+builder.Services.AddRazorPages();
 
 var app = builder.Build();
 
