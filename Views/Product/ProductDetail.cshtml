@@ -144,7 +144,12 @@
 				$.get("/Cart/CountCartItem",(res) => {
 					$(".icon-header-noti").attr('data-notify', res)
 				})
-			}).fail(() => { swal(name, "Error", "error") })
+			}).fail((err) => {
+				if (err.status == 401){
+					window.location.replace("/Account/Login")
+				}
+				else swal(name, "Error", "error") 
+			})
 		})
 	</script>
 }

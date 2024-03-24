@@ -143,7 +143,7 @@ namespace GroupProject_Ecommerce.Controllers
                 var user = User.FindFirst(ClaimTypes.NameIdentifier);
                 if (user == null)
                 {
-                    return RedirectToAction("Login", "Account");
+                    return Unauthorized();
                 }
                 string userId = user.Value;
 
@@ -194,8 +194,15 @@ namespace GroupProject_Ecommerce.Controllers
             var u = await _DbContext.Users.FindAsync(userId);
             ViewBag.Name = u.FirstName + " "  + u.LastName;
             ViewBag.Phone = u.PhoneNumber;
+            var address = await _DbContext.Addresses
+                .OrderByDescending(e => e.Id)
+                .FirstOrDefaultAsync(e => e.UserId == userId);
+            if(address != null)
+            {
+                ViewBag.Address = address.DiaChi ?? string.Empty;
+            }
 
-            return View(listItem);
+			return View(listItem);
         }
 
         [HttpPost]
@@ -221,9 +228,24 @@ namespace GroupProject_Ecommerce.Controllers
                     total += (cartItem.Product.Price - cartItem.Product.Price * (cartItem.Product.DiscountPercent / 100)) * cartItem.Quantity;
                 total = Math.Round(total);
 
-                var address = forms["address"] + ", " + forms["ward"] + ", "
-                    + forms["district"] + ", " + forms["city"];
-                var rec = forms["phone"] + " " + forms["name"];
+                var address = forms["address"] + "; " + forms["ward"] + "; "
+                    + forms["district"] + "; " + forms["city"];
+                var rec = forms["phone"] + "; " + forms["name"];
+                
+                var user_address = await _DbContext.Addresses
+                    .Where(e => e.UserId == userId && e.DiaChi == address)
+                    .ToListAsync();
+                if(!user_address.IsNullOrEmpty())
+                {
+                    _DbContext.Addresses.RemoveRange(user_address);
+                }
+                var model = new Address
+                {
+                    UserId = userId,
+                    DiaChi = address
+                };
+                await _DbContext.Addresses.AddAsync(model);
+
                 var order = new Order
                 {
                     UserId = userId,
@@ -247,8 +269,8 @@ namespace GroupProject_Ecommerce.Controllers
                         OrderId = order.Id,
                         ProductId = cartItem.ProductId,
                         Quantity = cartItem.Quantity,
-                        ProductCost = cartItem.Product.Price * cartItem.Quantity,
-                        UnitPrice = cartItem.Product.Price
+                        ProductCost = (cartItem.Product.Price - cartItem.Product.Price * (cartItem.Product.DiscountPercent / 100)) * cartItem.Quantity,
+                        UnitPrice = cartItem.Product.Price - cartItem.Product.Price * (cartItem.Product.DiscountPercent / 100)
                     };
                     await _DbContext.OrderDetails.AddAsync(orderDetail);
                 }
@@ -301,9 +323,6 @@ namespace GroupProject_Ecommerce.Controllers
                     "<p>Thân mến,</p>" +
                     "<p>Magic Shop</p>";
 
-
-
-
                 await _sendMailService.SendEmailAsync(email, subject, htmlMessage);
 
                 return RedirectToAction("PaymentSuccess", "Cart");
@@ -335,9 +354,23 @@ namespace GroupProject_Ecommerce.Controllers
                 total += (cartItem.Product.Price - cartItem.Product.Price * (cartItem.Product.DiscountPercent / 100)) * cartItem.Quantity;
             total = Math.Round(total);
 
-            var address = forms["address"] + ", " + forms["ward"] + ", "
-                    + forms["district"] + ", " + forms["city"];
-            var rec = forms["phone"] + " " + forms["name"];
+            var address = forms["address"] + "; " + forms["ward"] + "; "
+                    + forms["district"] + "; " + forms["city"];
+            var rec = forms["phone"] + "; " + forms["name"];
+
+            var user_address = await _DbContext.Addresses
+                    .Where(e => e.UserId == userId && e.DiaChi == address)
+                    .ToListAsync();
+            if (!user_address.IsNullOrEmpty())
+            {
+                _DbContext.Addresses.RemoveRange(user_address);
+            }
+            var model = new Address
+            {
+                UserId = userId,
+                DiaChi = address
+            };
+            await _DbContext.Addresses.AddAsync(model);
 
             var order = new Order
             {
@@ -363,8 +396,8 @@ namespace GroupProject_Ecommerce.Controllers
                     OrderId = order.Id,
                     ProductId = cartItem.ProductId,
                     Quantity = cartItem.Quantity,
-                    ProductCost = cartItem.Product.Price * cartItem.Quantity,
-                    UnitPrice = cartItem.Product.Price
+                    ProductCost = (cartItem.Product.Price - cartItem.Product.Price * (cartItem.Product.DiscountPercent / 100)) * cartItem.Quantity,
+                    UnitPrice = cartItem.Product.Price - cartItem.Product.Price * (cartItem.Product.DiscountPercent / 100)
                 };
                 await _DbContext.OrderDetails.AddAsync(orderDetail);
             }

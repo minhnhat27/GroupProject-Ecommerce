@@ -24,8 +24,11 @@ namespace GroupProject_Ecommerce.Migrations
 
             modelBuilder.Entity("GroupProject_Ecommerce.Models.Address", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("DiaChi")
                         .IsRequired()

@@ -85,29 +85,65 @@
                         </div>
                     <div class="block">
                         <h4 class="widget-title">Địa chỉ giao hàng</h4>
-						<div class="form-group">
-							<select name="city" class="form-control" id="city">
-                                <option value="-1">Tỉnh/Thành phố</option>
-                            </select>
-							<span class="text-danger city"></span>
-						</div>
-						<div class="form-group">
-                            <select name="district" value="0" class="form-control" id="district">
-                                <option value="-1">Quận/Huyện</option>
-                            </select>
-                            <span class="text-danger district"></span>
-						</div>
-						<div class="form-group">
-                            <select name="ward" class="form-control" id="ward">
-                                <option value="-1">Phường/Xã</option>
-                            </select>
-                            <span class="text-danger ward"></span>
-						</div>
-                        <div class="form-group">
-                            <label for="address">Địa chỉ cụ thể</label>
-                            <input name="address" class="form-control" id="address" />
-                            <span class="text-danger address"></span>
-                        </div>
+                            @{
+                                if (!string.IsNullOrEmpty(ViewBag.Address) && ViewBag.Address.Split(";").Length > 1)
+                                {
+                                    string[] add = ViewBag.Address.Split(";");
+
+                                    <div class="form-group">
+                                        <select name="city" class="form-control" id="city">
+                                            <option value="-1">Tỉnh/Thành phố</option>
+                                            <option class="temp" value="@add[add.Length - 1]" selected>@add[add.Length - 1]</option>
+                                        </select>
+                                        <span class="text-danger city"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <select name="district" class="form-control" id="district">
+                                            <option value="-1">Quận/Huyện</option>
+                                            <option class="temp" value="@add[add.Length - 2]" selected>@add[add.Length - 2]</option>
+                                        </select>
+                                        <span class="text-danger district"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <select name="ward" class="form-control" id="ward">
+                                            <option value="-1">Phường/Xã</option>
+                                            <option class="temp" value="@add[add.Length - 3]" selected>@add[add.Length - 3]</option>
+                                        </select>
+                                        <span class="text-danger ward"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="address">Địa chỉ cụ thể</label>
+                                        <input name="address" value="@add[add.Length - 4]" class="form-control" id="address" />
+                                        <span class="text-danger address"></span>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="form-group">
+                                        <select name="city" class="form-control" id="city">
+                                            <option value="-1">Tỉnh/Thành phố</option>
+                                        </select>
+                                        <span class="text-danger city"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <select name="district" class="form-control" id="district">
+                                            <option value="-1">Quận/Huyện</option>
+                                        </select>
+                                        <span class="text-danger district"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <select name="ward" class="form-control" id="ward">
+                                            <option value="-1">Phường/Xã</option>
+                                        </select>
+                                        <span class="text-danger ward"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="address">Địa chỉ cụ thể</label>
+                                        <input name="address" class="form-control" id="address" />
+                                        <span class="text-danger address"></span>
+                                    </div>
+                                }
+                        }
                     </div>
                     <div class="block">
                         <h4 class="widget-title">Phương thức thanh toán</h4>
@@ -193,6 +229,7 @@
         })
 
         city.on("change", () => {
+            $('.temp').remove()
             district.empty().append("<option value='-1'>Quận/Huyện</option>")
             $('.city').text('')
             ward.empty().append("<option value='-1'>Phường/Xã</option>")
