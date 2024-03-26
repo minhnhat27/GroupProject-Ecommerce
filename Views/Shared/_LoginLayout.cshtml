@@ -48,17 +48,17 @@
 					<div class="right-top-bar flex-w h-full">
 						@if (User.Identity.IsAuthenticated)
 						{
-							<span class="flex-c-m trans-04 p-lr-25">
+							<a asp-action="Profile" asp-controller="User" class="flex-c-m trans-04 p-lr-25">
 								@User.Identity.Name
-							</span>
+							</a>
 							<a asp-action="Logout" asp-controller="Account" class="flex-c-m trans-04 p-lr-25">
-								Logout
+								Đăng xuất
 							</a>
 						}
 						else
 						{
 							<a href="/Account/Login" class="flex-c-m trans-04 p-lr-25">
-								Login
+								Đăng nhập
 							</a>
 						}
 					</div>

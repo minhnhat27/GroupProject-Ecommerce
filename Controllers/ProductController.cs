@@ -42,5 +42,22 @@ namespace GroupProject_Ecommerce.Controllers
 				return View(product);
 			}
 		}
+
+		[HttpGet]
+		public IActionResult Search(string search)
+		{
+			search = search ?? string.Empty;
+			var viewModel = new HomeViewModel
+			{
+				Categories = _dbContext.Categories.ToList(),
+				ImagesWithProducts = _dbContext.Images
+					.Include(img => img.Product)
+					.Where(e => e.Product.Name.Contains(search))
+					.ToList()
+			};
+			ViewBag.Search = search;
+
+			return View(viewModel);
+		}
 	}
 }

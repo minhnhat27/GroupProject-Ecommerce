@@ -11,8 +11,15 @@
         <div class="row justify-content-center">
             <div class="col-lg-6 col-md-8 align-item-center">
                 <div class="border ">
-                    <h3 class="bg-gray p-4">LOGIN NOW</h3>
-
+                    <h3 class="bg-gray p-4">Đăng nhập</h3>
+                    @{
+                        string mess = TempData["Register"] as string ?? "";
+                        if (!string.IsNullOrEmpty(mess) && mess.Equals("Register"))
+                        {
+                            <span class="text-danger">*** Đăng ký thành công. Vui lòng đăng nhập lại</span>
+                            TempData["Register"] = string.Empty;
+                        }
+                    }
                     <form asp-action="Login" method="post">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <fieldset class="p-4">
@@ -24,7 +31,7 @@
                             <input asp-for="Password" class="form-control mb-4" placeholder="Password" />
                             <span asp-validation-for="Password" class="text-danger"></span>
 
-                            <button type="submit" class="btn-login">Log in</button>
+                            <button type="submit" class="btn-login">Đăng nhập</button>
                             <hr />
                             <div class="login-third">
                                 <a class="btn btn-login-third" asp-controller="Account" asp-action="GoogleLogin" asp-route-provider="Google">
@@ -35,7 +42,7 @@
                                 </a>
                             </div>
                             @* <a class="mt-3 d-block text-primary" href="#!">Forget Password?</a> *@
-                            <a asp-action="Register" class="mt-3 d-inline-block text-primary">Don't have account?'</a>
+                            <a asp-action="Register" class="mt-3 d-inline-block text-primary">Bạn chưa có tài khoản?</a>
                         </fieldset>
                     </form>
                 </div>

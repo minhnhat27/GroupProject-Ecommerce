@@ -10,18 +10,18 @@
 <section class="login py-5 border-top-1">
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-lg-5 col-md-8 align-item-center">
+            <div class="col-lg-6 col-md-8 align-item-center">
                 <div class="border border">
-                    <h3 class="bg-gray p-4">Register Now</h3>
+                    <h3 class="bg-gray p-4">Đăng Ký Tài Khoản</h3>
                     <form asp-action="Register" method="post">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <fieldset class="p-4">
                             <div>
-                                <input asp-for="FirstName" class="form-control mb-4" placeholder="FirstName">
+                                <input asp-for="FirstName" class="form-control mb-4" placeholder="Tên và chữ lót">
                                 <span asp-validation-for="FirstName" class="text-danger"></span>
                             </div>
                             <div>
-                                <input asp-for="LastName" class="form-control mb-4" placeholder="LastName">
+                                <input asp-for="LastName" class="form-control mb-4" placeholder="Họ">
                                 <span asp-validation-for="LastName" class="text-danger"></span>
                             </div>
                             <div>
@@ -29,7 +29,7 @@
                                 <span asp-validation-for="UserName" class="text-danger"></span>
                             </div>
                             <div>
-                                <input asp-for="PhoneNumber" class="form-control mb-4" placeholder="PhoneNumber">
+                                <input asp-for="PhoneNumber" class="form-control mb-4" placeholder="Số điện thoại">
                                 <span asp-validation-for="PhoneNumber" class="text-danger"></span>
                             </div>
                             <div>
@@ -37,7 +37,7 @@
                                 <span asp-validation-for="Email" class="text-danger"></span>
                             </div>
                             <select asp-for="City" class="form-control mb-4" onchange="setSelectedCity(this)">
-                                <option value="">Select a city</option>
+                                <option value="">Chọn thành phố</option>
                                 @foreach (var city in ViewBag.Cities)
                                 {
                                     <option value="@city.province_name">@city.province_name</option>
@@ -53,15 +53,15 @@
                                 }
                             </script>
                             <div>
-                                <input asp-for="Password" class="form-control mb-4" placeholder="Password">
+                                <input asp-for="Password" class="form-control mb-4" placeholder="Mật khẩu">
                                 <span asp-validation-for="Password" class="text-danger"></span>
                             </div>
                             <div>
-                                <input asp-for="ConfirmPassword" class="form-control mb-4" placeholder="Confirm Password">
+                                <input asp-for="ConfirmPassword" class="form-control mb-4" placeholder="Xác nhận mật khẩu">
                                 <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
                             </div>
 
-                            <button type="submit" class="btn-login">Register</button>
+                            <button type="submit" class="btn-login">Đăng ký ngay</button>
                         </fieldset>
                     </form>
                 </div>

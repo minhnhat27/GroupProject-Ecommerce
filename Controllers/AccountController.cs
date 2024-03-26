@@ -33,6 +33,11 @@ namespace GroupProject_Ecommerce.Controllers
 
 		public IActionResult Login()
 		{
+   //         var reg = ViewData["Register"] as string ?? "";
+			//if (reg.Equals("Register"))
+   //         {
+   //             ViewBag.Register = "Register";
+   //         }
 			return View();
 		}
 
@@ -69,7 +74,7 @@ namespace GroupProject_Ecommerce.Controllers
                 var result = JsonConvert.DeserializeObject<CityResponse>(data);
                 var cities = result.Results;
                 ViewBag.Cities = cities;
-                return View("Register");
+				return View("Register");
             }
             else
             {
@@ -96,7 +101,8 @@ namespace GroupProject_Ecommerce.Controllers
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("Login", "Account");
+					TempData["Register"] = "Register";
+					return RedirectToAction("Login", "Account");
                 }
 
                 foreach (var error in result.Errors)
