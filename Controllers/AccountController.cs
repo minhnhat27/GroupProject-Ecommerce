@@ -6,15 +6,14 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Newtonsoft.Json;
 using System.Security.Claims;
 using GroupProject_Ecommerce.Data;
-using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
+using GroupProject_Ecommerce.Helpers;
 
 namespace GroupProject_Ecommerce.Controllers
 {
-	[AllowAnonymous]
+    [AllowAnonymous]
 	public class AccountController : Controller
 	{
 		private readonly UserManager<User> _userManager;
@@ -33,11 +32,6 @@ namespace GroupProject_Ecommerce.Controllers
 
 		public IActionResult Login()
 		{
-   //         var reg = ViewData["Register"] as string ?? "";
-			//if (reg.Equals("Register"))
-   //         {
-   //             ViewBag.Register = "Register";
-   //         }
 			return View();
 		}
 
@@ -45,7 +39,10 @@ namespace GroupProject_Ecommerce.Controllers
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> Login(LoginModel model)
 		{
-			if (ModelState.IsValid)
+            var captcha = Request.Form["g-Recaptcha-Response"];
+            var resultValidateCaptcha = ReCaptcha.Validate(captcha).Result;
+
+            if (ModelState.IsValid && resultValidateCaptcha)
 			{
 				var result = await _signInManager.PasswordSignInAsync(model.UserName, model.Password, false, false);
 				if (result.Succeeded)
@@ -60,8 +57,10 @@ namespace GroupProject_Ecommerce.Controllers
 				return View(model);
 
 			}
-			//_signInManager.PasswordSignInAsync()
-			return View(model);
+            if(string.IsNullOrEmpty(captcha))
+                ModelState.AddModelError("ReCaptcha", "ReCaptcha is required");
+
+            return View(model);
 		}
 
         public async Task<IActionResult> Register()

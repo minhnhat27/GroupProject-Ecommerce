@@ -30,6 +30,11 @@
 
                             <input asp-for="Password" class="form-control mb-4" placeholder="Password" />
                             <span asp-validation-for="Password" class="text-danger"></span>
+                            
+                            <div class="mb-4">
+                                <div class="g-recaptcha" data-sitekey="6LdYW6kpAAAAAOIxaIvvomv8v989LLMgkL_tTrXj"></div>
+                            </div>
+                            @Html.ValidationMessage("ReCaptcha", new { @class = "text-danger" })
 
                             <button type="submit" class="btn-login">Đăng nhập</button>
                             <hr />
@@ -50,3 +55,7 @@
         </div>
     </div>
 </section>
+
+@section Scripts{
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+}
